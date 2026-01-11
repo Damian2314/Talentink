@@ -5,10 +5,10 @@
   <title>TalentInk — AI Writing Toolkit</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content="Humanize text, generate cover letters, and create social posts. 2 free generations." />
-
-  <!-- FAVICON -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%237c3aed'/%3E%3Cstop offset='100%25' stop-color='%234f46e5'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='14' fill='url(%23g)'/%3E%3Cpath d='M18 44c10-11 18-20 28-28' stroke='white' stroke-width='5' stroke-linecap='round'/%3E%3Cpath d='M22 24c6-5 12-7 20-8' stroke='rgba(255,255,255,.55)' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
   <meta name="theme-color" content="#0b0b13">
+
+  <!-- FAVICON (logo in browser tab) -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%237c3aed'/%3E%3Cstop offset='100%25' stop-color='%234f46e5'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='14' fill='url(%23g)'/%3E%3Cpath d='M18 44c10-11 18-20 28-28' stroke='white' stroke-width='5' stroke-linecap='round'/%3E%3Cpath d='M22 24c6-5 12-7 20-8' stroke='rgba(255,255,255,.55)' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -29,6 +29,7 @@
     *{box-sizing:border-box}
     body{
       margin:0;
+      min-height:100vh;
       font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
       background:
         radial-gradient(1200px 800px at 10% 10%, rgba(124,58,237,.28), transparent 60%),
@@ -124,65 +125,6 @@
     .spinner{width:16px; height:16px; border-radius:999px; border:2px solid rgba(255,255,255,.25); border-top-color: rgba(255,255,255,.9); display:inline-block; animation: spin .8s linear infinite; vertical-align:middle;}
     @keyframes spin{to{transform:rotate(360deg)}}
     .toast{position:fixed; bottom:16px; left:50%; transform:translateX(-50%); background: rgba(0,0,0,.7); border:1px solid var(--line); color:var(--text); padding:10px 12px; border-radius:999px; font-size:13px; display:none; z-index:50;}
-
-    /* Footer */
-    .siteFooter{
-      margin-top:26px;
-      padding:22px 0 10px;
-      border-top:1px solid rgba(255,255,255,.10);
-      color:rgba(233,233,255,.70);
-    }
-    .footerGrid{
-      display:grid;
-      grid-template-columns: 1.2fr .8fr .8fr;
-      gap:14px;
-      align-items:start;
-    }
-    @media (max-width: 900px){
-      .footerGrid{ grid-template-columns:1fr; }
-    }
-    .footerCol h4{
-      margin:0 0 8px;
-      font-size:13px;
-      color:rgba(233,233,255,.9);
-    }
-    .footerLinks{
-      display:flex;
-      flex-direction:column;
-      gap:8px;
-    }
-    .footerLinks a{
-      color:rgba(233,233,255,.70);
-      font-size:13px;
-      text-decoration:none;
-      border-bottom:1px dashed rgba(255,255,255,.18);
-      width:fit-content;
-    }
-    .footerLinks a:hover{
-      color:rgba(233,233,255,.95);
-      border-bottom-color: rgba(124,58,237,.55);
-    }
-    .footerBottom{
-      display:flex;
-      justify-content:space-between;
-      gap:12px;
-      flex-wrap:wrap;
-      margin-top:14px;
-      font-size:12px;
-      color:rgba(233,233,255,.55);
-    }
-    .langSelect{
-      display:flex;
-      gap:10px;
-      align-items:center;
-    }
-    .langSelect select{
-      width:auto;
-      padding:8px 10px;
-      border-radius:12px;
-      font-size:12px;
-      background: rgba(0,0,0,.22);
-    }
   </style>
 </head>
 
@@ -197,9 +139,11 @@
             <path d="M10.2 19.3c2.2-.2 4.8-1.6 6.6-3.6" stroke="rgba(255,255,255,.55)" stroke-width="2.2" stroke-linecap="round"/>
           </svg>
         </div>
-        <span>TalentInk</span>
-        <span class="pill">✨ 3 tools • 2 free generations</span>
+
+        <span id="ui_brand">TalentInk</span>
+        <span class="pill" id="ui_pill">✨ 3 tools • 2 free generations</span>
       </div>
+
       <div style="display:flex; gap:10px; align-items:center;">
         <button class="btn" id="resetBtn">Reset free counter</button>
         <button class="btn primary" id="pricingBtn">Pricing</button>
@@ -209,18 +153,18 @@
     <div class="hero">
       <div class="card">
         <div class="hd">
-          <div class="pill">Fast • Clean • Human-quality writing</div>
-          <h1>Write better in seconds.</h1>
-          <p class="sub">
+          <div class="pill" id="ui_heroPill">Fast • Clean • Human-quality writing</div>
+          <h1 id="ui_title">Write better in seconds.</h1>
+          <p class="sub" id="ui_sub">
             Humanize text, generate a tailored cover letter, or create social posts that don’t sound like a bot.
             Start free — no account needed.
           </p>
         </div>
 
         <div class="tabs">
-          <button class="tab active" data-tool="humanize">🧠 Humanize</button>
-          <button class="tab" data-tool="coverletter">💼 Cover Letter</button>
-          <button class="tab" data-tool="social">📣 Social Post</button>
+          <button class="tab active" data-tool="humanize" id="tab_humanize">🧠 Humanize</button>
+          <button class="tab" data-tool="coverletter" id="tab_cover">💼 Cover Letter</button>
+          <button class="tab" data-tool="social" id="tab_social">📣 Social Post</button>
         </div>
 
         <div class="tool" id="toolArea"></div>
@@ -229,37 +173,37 @@
       <div class="card">
         <div class="side">
           <div class="box">
-            <h3>Free limit</h3>
+            <h3 id="ui_freeTitle">Free limit</h3>
             <p id="freeInfo">You have 2 free generations available.</p>
           </div>
 
           <div class="box">
-            <h3>What you get</h3>
-            <p>✅ Natural rewriting</p>
-            <p>✅ Multi-language output</p>
-            <p>✅ Copy & save results</p>
+            <h3 id="ui_getTitle">What you get</h3>
+            <p id="ui_get1">✅ Natural rewriting</p>
+            <p id="ui_get2">✅ Multi-language output</p>
+            <p id="ui_get3">✅ Copy & save results</p>
           </div>
 
           <div class="box">
-            <h3>Pricing (next step)</h3>
-            <p style="margin-top:8px; color:var(--muted); font-size:13px;">
+            <h3 id="ui_priceTitle">Pricing (next step)</h3>
+            <p id="ui_priceNote" style="margin-top:8px; color:var(--muted); font-size:13px;">
               We’ll connect payments after the MVP is stable.
             </p>
             <div class="pricing">
               <div class="priceCard">
-                <strong>3 generations — $2</strong>
-                <span>Pay as you go</span>
+                <strong id="ui_price1">3 generations — $2</strong>
+                <span id="ui_price1b">Pay as you go</span>
               </div>
               <div class="priceCard">
-                <strong>10 generations — $5</strong>
-                <span>Best value</span>
+                <strong id="ui_price2">10 generations — $5</strong>
+                <span id="ui_price2b">Best value</span>
               </div>
             </div>
           </div>
 
           <div class="paywall" id="paywall">
-            <h4>Free limit reached</h4>
-            <p>
+            <h4 id="ui_payTitle">Free limit reached</h4>
+            <p id="ui_payText">
               You’ve used your 2 free generations on this device.
               Next step: payments + accounts to unlock more.
             </p>
@@ -269,54 +213,24 @@
             </div>
           </div>
 
-          <div class="footer">© <span id="yr"></span> TalentInk</div>
+          <div class="footer">© <span id="yr"></span> <span id="ui_footerBrand">TalentInk</span></div>
+
+          <!-- Language switch (UI) -->
+          <div class="box" style="margin-top:-4px;">
+            <h3 id="ui_langTitle">Language</h3>
+            <select id="lang">
+              <option value="en">English</option>
+              <option value="ru">Русский</option>
+              <option value="es">Español</option>
+              <option value="de">Deutsch</option>
+              <option value="fr">Français</option>
+            </select>
+            <p id="ui_langHint" style="margin-top:8px;">(UI only for now — translation will be expanded later)</p>
+          </div>
+
         </div>
       </div>
     </div>
-
-    <footer class="siteFooter">
-      <div class="footerGrid">
-        <div class="footerCol">
-          <h4 id="ftBrandTitle">TalentInk</h4>
-          <div id="ftBrandDesc" style="font-size:13px; line-height:1.6; color:rgba(233,233,255,.65); max-width:52ch;">
-            Humanize text, generate cover letters, and create social posts that sound natural.
-          </div>
-        </div>
-
-        <div class="footerCol">
-          <h4 id="ftProduct">Product</h4>
-          <div class="footerLinks">
-            <a href="#" onclick="document.querySelector('[data-tool=humanize]').click(); return false;" id="ftHumanize">Humanize</a>
-            <a href="#" onclick="document.querySelector('[data-tool=coverletter]').click(); return false;" id="ftCover">Cover Letter</a>
-            <a href="#" onclick="document.querySelector('[data-tool=social]').click(); return false;" id="ftSocial">Social Post</a>
-          </div>
-        </div>
-
-        <div class="footerCol">
-          <h4 id="ftLegal">Legal</h4>
-          <div class="footerLinks">
-            <a href="/privacy.html" id="ftPrivacy">Privacy Policy</a>
-            <a href="/terms.html" id="ftTerms">Terms of Service</a>
-            <a href="#" onclick="showSupport(); return false;" id="ftSupport">Support</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="footerBottom">
-        <div id="ftCopyright">© <span id="yr2"></span> TalentInk. All rights reserved.</div>
-
-        <div class="langSelect">
-          <span id="ftLangLabel">Language:</span>
-          <select id="lang">
-            <option value="en">English</option>
-            <option value="ru">Русский</option>
-            <option value="es">Español</option>
-            <option value="de">Deutsch</option>
-            <option value="fr">Français</option>
-          </select>
-        </div>
-      </div>
-    </footer>
   </div>
 
   <div class="toast" id="toast"></div>
@@ -324,112 +238,338 @@
   <script>
     const FREE_LIMIT = 2;
     const LS_KEY = "ti_free_used_v1";
-    const LANG_KEY = "ti_lang_v1";
+    const LANG_KEY = "ti_lang_v2";
     const state = { tool: "humanize", loading: false };
 
-    const i18n = {
+    // ---- i18n (full UI) ----
+    const I18N = {
       en: {
-        langLabel: "Language:",
-        product: "Product",
-        legal: "Legal",
-        support: "Support",
-        brandDesc: "Humanize text, generate cover letters, and create social posts that sound natural.",
-        supportMsg: "Support: we’ll add an email soon.",
-        privacy: "Privacy Policy",
-        terms: "Terms of Service",
-        copyright: (y)=>`© ${y} TalentInk. All rights reserved.`
+        pill: (n)=>`✨ 3 tools • ${n} free generations`,
+        resetBtn: "Reset free counter",
+        pricingBtn: "Pricing",
+
+        heroPill: "Fast • Clean • Human-quality writing",
+        title: "Write better in seconds.",
+        sub: "Humanize text, generate a tailored cover letter, or create social posts that don’t sound like a bot. Start free — no account needed.",
+
+        tabHumanize: "🧠 Humanize",
+        tabCover: "💼 Cover Letter",
+        tabSocial: "📣 Social Post",
+
+        freeTitle: "Free limit",
+        freeInfo: (left)=> left>0 ? `You have ${left} free generation${left===1?"":"s"} available.` : "Free limit reached.",
+
+        getTitle: "What you get",
+        get1: "✅ Natural rewriting",
+        get2: "✅ Multi-language output",
+        get3: "✅ Copy & save results",
+
+        priceTitle: "Pricing (next step)",
+        priceNote: "We’ll connect payments after the MVP is stable.",
+        price1: "3 generations — $2",
+        price1b: "Pay as you go",
+        price2: "10 generations — $5",
+        price2b: "Best value",
+
+        payTitle: "Free limit reached",
+        payText: "You’ve used your 2 free generations on this device. Next step: payments + accounts to unlock more.",
+        buyBtn: "Unlock more (soon)",
+        learnBtn: "How it works",
+
+        footerBrand: "TalentInk",
+        langTitle: "Language",
+        langHint: "(UI only for now — translation will be expanded later)",
+
+        // Tools common
+        labelTone: "Tone",
+        labelLanguage: "Language",
+        btnCopy: "Copy",
+        btnSave: "Save .txt",
+
+        toneNeutral: "Neutral",
+        toneProfessional: "Professional",
+        toneFriendly: "Friendly",
+        toneConfident: "Confident",
+        toneCreative: "Creative",
+
+        langAuto: "Auto",
+        langEnglish: "English",
+        langRussian: "Russian",
+        langSpanish: "Spanish",
+        langGerman: "German",
+        langFrench: "French",
+
+        // Tool: Humanize
+        h_labelText: "Text to humanize",
+        h_placeholder: "Paste AI text or any text...",
+        h_btn: "✨ Humanize",
+        h_mini: "Keeps meaning • improves flow",
+
+        // Tool: Cover letter
+        c_jobTitle: "Job title",
+        c_jobTitlePh: "e.g., Junior Frontend Developer",
+        c_company: "Company (optional)",
+        c_companyPh: "e.g., Acme Inc.",
+        c_bg: "Your experience / strengths (bullet points)",
+        c_bgPh: "- 1 year React\n- Strong communication\n- Portfolio: ...",
+        c_desc: "Job description (paste)",
+        c_descPh: "Paste job description here...",
+        c_btn: "💼 Generate letter",
+        c_mini: "Tailored • hiring-friendly",
+        c_toneProfessional: "Professional",
+        c_toneWarm: "Warm",
+        c_toneShort: "Short & direct",
+
+        // Tool: Social
+        s_topic: "What is your post about?",
+        s_topicPh: "e.g., I launched an AI tool that humanizes text...",
+        s_platform: "Platform",
+        s_style: "Style",
+        s_len: "Length",
+        s_btn: "📣 Generate post",
+        s_mini: "Hook • structure • CTA",
+        s_styleSimple: "Simple",
+        s_styleHype: "Hype",
+        s_styleEdu: "Educational",
+        s_styleStory: "Story",
+        s_stylePro: "Professional",
+        s_lenShort: "Short",
+        s_lenMed: "Medium",
+        s_lenLong: "Long",
+        s_plTg: "Telegram",
+        s_plIg: "Instagram",
+        s_plX: "Twitter/X",
+        s_plLi: "LinkedIn",
+
+        // Toasts / errors
+        t_saved: "Saved ✅",
+        t_done: "Done ✅",
+        t_copied: "Copied ✨",
+        t_savedFile: "Saved ✅",
+        t_counterReset: "Counter reset",
+        t_freeLimit: "Free limit reached.",
+        t_pasteFirst: "Paste text first.",
+        t_fillRequired: "Fill required fields.",
+        t_describeTopic: "Describe your topic.",
+        t_nothingCopy: "Nothing to copy.",
+        t_nothingSave: "Nothing to save.",
+        t_requestFailed: "Request failed",
+        t_network: "Network error",
+        t_paymentsNext: "Payments next ✅",
+        t_howWorks: "We’ll add paywall soon"
       },
+
       ru: {
-        langLabel: "Язык:",
-        product: "Продукт",
-        legal: "Юридическое",
-        support: "Поддержка",
-        brandDesc: "Очеловечивайте текст, генерируйте сопроводительные письма и делайте посты для соцсетей.",
-        supportMsg: "Поддержка: скоро добавим email.",
-        privacy: "Политика конфиденциальности",
-        terms: "Условия использования",
-        copyright: (y)=>`© ${y} TalentInk. Все права защищены.`
+        pill: (n)=>`✨ 3 инструмента • ${n} бесплатн${n===1?"ая":"ые"} попыт${n===1?"ка":"ки"}`,
+        resetBtn: "Сбросить счётчик",
+        pricingBtn: "Цены",
+
+        heroPill: "Быстро • Чисто • Как человек",
+        title: "Пиши лучше за секунды.",
+        sub: "Очеловечь текст, сделай сопроводительное письмо или пост для соцсетей без «бот-стиля». Начни бесплатно — аккаунт не нужен.",
+
+        tabHumanize: "🧠 Очеловечить",
+        tabCover: "💼 Сопроводительное",
+        tabSocial: "📣 Пост в соцсети",
+
+        freeTitle: "Бесплатный лимит",
+        freeInfo: (left)=> left>0 ? `Осталось ${left} бесплатн${left===1?"ая":"ые"} попыт${left===1?"ка":"ки"}.` : "Бесплатный лимит исчерпан.",
+
+        getTitle: "Что вы получаете",
+        get1: "✅ Естественный текст",
+        get2: "✅ Вывод на разных языках",
+        get3: "✅ Копировать и сохранять",
+
+        priceTitle: "Оплата (следующий шаг)",
+        priceNote: "Подключим платежи после стабилизации MVP.",
+        price1: "3 генерации — $2",
+        price1b: "Оплата по факту",
+        price2: "10 генераций — $5",
+        price2b: "Выгоднее",
+
+        payTitle: "Бесплатный лимит исчерпан",
+        payText: "Вы использовали 2 бесплатные попытки на этом устройстве. Дальше: платежи + аккаунты, чтобы открыть больше.",
+        buyBtn: "Открыть больше (скоро)",
+        learnBtn: "Как это работает",
+
+        footerBrand: "TalentInk",
+        langTitle: "Язык",
+        langHint: "(пока только интерфейс — позже расширим перевод)",
+
+        labelTone: "Тон",
+        labelLanguage: "Язык",
+        btnCopy: "Копировать",
+        btnSave: "Сохранить .txt",
+
+        toneNeutral: "Нейтральный",
+        toneProfessional: "Профессиональный",
+        toneFriendly: "Дружелюбный",
+        toneConfident: "Уверенный",
+        toneCreative: "Креативный",
+
+        langAuto: "Авто",
+        langEnglish: "Английский",
+        langRussian: "Русский",
+        langSpanish: "Испанский",
+        langGerman: "Немецкий",
+        langFrench: "Французский",
+
+        h_labelText: "Текст для улучшения",
+        h_placeholder: "Вставь AI-текст или любой текст...",
+        h_btn: "✨ Очеловечить",
+        h_mini: "Смысл сохраняется • читабельность растёт",
+
+        c_jobTitle: "Должность",
+        c_jobTitlePh: "например, Junior Frontend Developer",
+        c_company: "Компания (необязательно)",
+        c_companyPh: "например, Acme Inc.",
+        c_bg: "Ваш опыт / сильные стороны (пункты)",
+        c_bgPh: "- 1 год React\n- Коммуникация\n- Портфолио: ...",
+        c_desc: "Описание вакансии (вставь текст)",
+        c_descPh: "Вставь описание вакансии...",
+        c_btn: "💼 Сгенерировать письмо",
+        c_mini: "По вакансии • подходит для HR",
+        c_toneProfessional: "Профессионально",
+        c_toneWarm: "Тепло",
+        c_toneShort: "Коротко и по делу",
+
+        s_topic: "О чём ваш пост?",
+        s_topicPh: "например, Я запустил AI-инструмент, который делает текст живым...",
+        s_platform: "Площадка",
+        s_style: "Стиль",
+        s_len: "Длина",
+        s_btn: "📣 Сгенерировать пост",
+        s_mini: "Хук • структура • призыв",
+        s_styleSimple: "Просто",
+        s_styleHype: "Хайп",
+        s_styleEdu: "Обучающе",
+        s_styleStory: "История",
+        s_stylePro: "Профессионально",
+        s_lenShort: "Короткий",
+        s_lenMed: "Средний",
+        s_lenLong: "Длинный",
+        s_plTg: "Telegram",
+        s_plIg: "Instagram",
+        s_plX: "Twitter/X",
+        s_plLi: "LinkedIn",
+
+        t_saved: "Сохранено ✅",
+        t_done: "Готово ✅",
+        t_copied: "Скопировано ✨",
+        t_savedFile: "Сохранено ✅",
+        t_counterReset: "Счётчик сброшен",
+        t_freeLimit: "Бесплатный лимит исчерпан.",
+        t_pasteFirst: "Сначала вставь текст.",
+        t_fillRequired: "Заполни обязательные поля.",
+        t_describeTopic: "Опиши тему поста.",
+        t_nothingCopy: "Нечего копировать.",
+        t_nothingSave: "Нечего сохранять.",
+        t_requestFailed: "Ошибка запроса",
+        t_network: "Ошибка сети",
+        t_paymentsNext: "Платежи — следующий шаг ✅",
+        t_howWorks: "Скоро добавим paywall"
       },
-      es: {
-        langLabel: "Idioma:",
-        product: "Producto",
-        legal: "Legal",
-        support: "Soporte",
-        brandDesc: "Humaniza texto, crea cartas de presentación y posts para redes sociales.",
-        supportMsg: "Soporte: pronto añadiremos un correo.",
-        privacy: "Política de privacidad",
-        terms: "Términos de servicio",
-        copyright: (y)=>`© ${y} TalentInk. Todos los derechos reservados.`
-      },
-      de: {
-        langLabel: "Sprache:",
-        product: "Produkt",
-        legal: "Rechtliches",
-        support: "Support",
-        brandDesc: "Mache Texte menschlicher, erstelle Anschreiben und Social Posts.",
-        supportMsg: "Support: E-Mail folgt in Kürze.",
-        privacy: "Datenschutz",
-        terms: "Nutzungsbedingungen",
-        copyright: (y)=>`© ${y} TalentInk. Alle Rechte vorbehalten.`
-      },
-      fr: {
-        langLabel: "Langue :",
-        product: "Produit",
-        legal: "Mentions",
-        support: "Support",
-        brandDesc: "Humanisez le texte, générez des lettres et créez des posts sociaux.",
-        supportMsg: "Support : un e-mail sera ajouté bientôt.",
-        privacy: "Politique de confidentialité",
-        terms: "Conditions d’utilisation",
-        copyright: (y)=>`© ${y} TalentInk. Tous droits réservés.`
-      }
+
+      // остальные языки пока fallback на EN (можно потом дописать)
+      es: null,
+      de: null,
+      fr: null
     };
 
+    function getLang(){
+      const saved = localStorage.getItem(LANG_KEY) || "en";
+      return I18N[saved] ? saved : "en";
+    }
+
+    function dict(){
+      const l = getLang();
+      return I18N[l] || I18N.en;
+    }
+
+    function t(key, ...args){
+      const d = dict();
+      const val = d[key] ?? I18N.en[key];
+      return (typeof val === "function") ? val(...args) : (val ?? "");
+    }
+
     function getUsed(){ return Number(localStorage.getItem(LS_KEY) || 0); }
-    function setUsed(v){ localStorage.setItem(LS_KEY, String(v)); renderFreeInfo(); }
+    function setUsed(v){ localStorage.setItem(LS_KEY, String(v)); renderFreeInfo(); updatePill(); }
     function freeLeft(){ return Math.max(0, FREE_LIMIT - getUsed()); }
 
     function toast(msg){
-      const t = document.getElementById("toast");
-      t.textContent = msg; t.style.display = "block";
-      setTimeout(()=> t.style.display = "none", 1800);
+      const el = document.getElementById("toast");
+      el.textContent = msg;
+      el.style.display = "block";
+      setTimeout(()=> el.style.display = "none", 1800);
+    }
+
+    function updatePill(){
+      document.getElementById("ui_pill").textContent = t("pill", FREE_LIMIT);
     }
 
     function renderFreeInfo(){
       const left = freeLeft();
-      document.getElementById("freeInfo").textContent =
-        left > 0 ? `You have ${left} free generation${left===1?"":"s"} available.` : `Free limit reached.`;
+      document.getElementById("freeInfo").textContent = t("freeInfo", left);
       document.getElementById("paywall").style.display = left === 0 ? "block" : "none";
+    }
+
+    // сохраняем значения формы при смене языка, чтобы не пропадали
+    function captureToolValues(){
+      const root = document.getElementById("toolArea");
+      const map = {};
+      if(!root) return map;
+      root.querySelectorAll("input, textarea, select").forEach(el=>{
+        if(el.id) map[el.id] = el.value;
+      });
+      return map;
+    }
+
+    function restoreToolValues(map){
+      const root = document.getElementById("toolArea");
+      if(!root) return;
+      Object.keys(map).forEach(id=>{
+        const el = root.querySelector("#"+CSS.escape(id));
+        if(el) el.value = map[id];
+      });
     }
 
     function toolHumanize(){
       return `
-        <label>Text to humanize</label>
-        <textarea id="inputText" placeholder="Paste AI text or any text..."></textarea>
+        <label>${t("h_labelText")}</label>
+        <textarea id="inputText" placeholder="${t("h_placeholder")}"></textarea>
 
         <div class="grid2">
           <div>
-            <label>Tone</label>
+            <label>${t("labelTone")}</label>
             <select id="tone">
-              <option>Neutral</option><option>Professional</option><option>Friendly</option><option>Confident</option><option>Creative</option>
+              <option value="Neutral">${t("toneNeutral")}</option>
+              <option value="Professional">${t("toneProfessional")}</option>
+              <option value="Friendly">${t("toneFriendly")}</option>
+              <option value="Confident">${t("toneConfident")}</option>
+              <option value="Creative">${t("toneCreative")}</option>
             </select>
           </div>
           <div>
-            <label>Language</label>
+            <label>${t("labelLanguage")}</label>
             <select id="language">
-              <option>Auto</option><option>English</option><option>Russian</option><option>Spanish</option><option>German</option><option>French</option>
+              <option value="Auto">${t("langAuto")}</option>
+              <option value="English">${t("langEnglish")}</option>
+              <option value="Russian">${t("langRussian")}</option>
+              <option value="Spanish">${t("langSpanish")}</option>
+              <option value="German">${t("langGerman")}</option>
+              <option value="French">${t("langFrench")}</option>
             </select>
           </div>
         </div>
 
         <div class="actions">
           <div class="leftActions">
-            <button class="btn primary" id="goBtn" data-label="✨ Humanize">✨ Humanize</button>
-            <span class="mini">Keeps meaning • improves flow</span>
+            <button class="btn primary" id="goBtn" data-label="${t("h_btn")}">${t("h_btn")}</button>
+            <span class="mini">${t("h_mini")}</span>
           </div>
           <div class="leftActions">
-            <button class="btn" id="copyBtn">Copy</button>
-            <button class="btn" id="saveBtn">Save .txt</button>
+            <button class="btn" id="copyBtn">${t("btnCopy")}</button>
+            <button class="btn" id="saveBtn">${t("btnSave")}</button>
           </div>
         </div>
 
@@ -439,41 +579,48 @@
 
     function toolCoverLetter(){
       return `
-        <label>Job title</label>
-        <input id="jobTitle" placeholder="e.g., Junior Frontend Developer" />
+        <label>${t("c_jobTitle")}</label>
+        <input id="jobTitle" placeholder="${t("c_jobTitlePh")}" />
 
-        <label>Company (optional)</label>
-        <input id="company" placeholder="e.g., Acme Inc." />
+        <label>${t("c_company")}</label>
+        <input id="company" placeholder="${t("c_companyPh")}" />
 
-        <label>Your experience / strengths (bullet points)</label>
-        <textarea id="background" placeholder="- 1 year React\n- Strong communication\n- Portfolio: ..."></textarea>
+        <label>${t("c_bg")}</label>
+        <textarea id="background" placeholder="${t("c_bgPh")}"></textarea>
 
-        <label>Job description (paste)</label>
-        <textarea id="jobDesc" placeholder="Paste job description here..."></textarea>
+        <label>${t("c_desc")}</label>
+        <textarea id="jobDesc" placeholder="${t("c_descPh")}"></textarea>
 
         <div class="grid2">
           <div>
-            <label>Language</label>
+            <label>${t("labelLanguage")}</label>
             <select id="language">
-              <option>English</option><option>Russian</option><option>Spanish</option><option>German</option><option>French</option>
+              <option value="English">${t("langEnglish")}</option>
+              <option value="Russian">${t("langRussian")}</option>
+              <option value="Spanish">${t("langSpanish")}</option>
+              <option value="German">${t("langGerman")}</option>
+              <option value="French">${t("langFrench")}</option>
             </select>
           </div>
           <div>
-            <label>Tone</label>
+            <label>${t("labelTone")}</label>
             <select id="tone">
-              <option>Professional</option><option>Warm</option><option>Confident</option><option>Short & direct</option>
+              <option value="Professional">${t("c_toneProfessional")}</option>
+              <option value="Warm">${t("c_toneWarm")}</option>
+              <option value="Confident">${t("toneConfident")}</option>
+              <option value="Short & direct">${t("c_toneShort")}</option>
             </select>
           </div>
         </div>
 
         <div class="actions">
           <div class="leftActions">
-            <button class="btn primary" id="goBtn" data-label="💼 Generate letter">💼 Generate letter</button>
-            <span class="mini">Tailored • hiring-friendly</span>
+            <button class="btn primary" id="goBtn" data-label="${t("c_btn")}">${t("c_btn")}</button>
+            <span class="mini">${t("c_mini")}</span>
           </div>
           <div class="leftActions">
-            <button class="btn" id="copyBtn">Copy</button>
-            <button class="btn" id="saveBtn">Save .txt</button>
+            <button class="btn" id="copyBtn">${t("btnCopy")}</button>
+            <button class="btn" id="saveBtn">${t("btnSave")}</button>
           </div>
         </div>
 
@@ -483,47 +630,60 @@
 
     function toolSocial(){
       return `
-        <label>What is your post about?</label>
-        <textarea id="topic" placeholder="e.g., I launched an AI tool that humanizes text..."></textarea>
+        <label>${t("s_topic")}</label>
+        <textarea id="topic" placeholder="${t("s_topicPh")}"></textarea>
 
         <div class="grid2">
           <div>
-            <label>Platform</label>
+            <label>${t("s_platform")}</label>
             <select id="platform">
-              <option>Telegram</option><option>Instagram</option><option>Twitter/X</option><option>LinkedIn</option>
+              <option value="Telegram">${t("s_plTg")}</option>
+              <option value="Instagram">${t("s_plIg")}</option>
+              <option value="Twitter/X">${t("s_plX")}</option>
+              <option value="LinkedIn">${t("s_plLi")}</option>
             </select>
           </div>
           <div>
-            <label>Style</label>
+            <label>${t("s_style")}</label>
             <select id="tone">
-              <option>Simple</option><option>Hype</option><option>Educational</option><option>Story</option><option>Professional</option>
+              <option value="Simple">${t("s_styleSimple")}</option>
+              <option value="Hype">${t("s_styleHype")}</option>
+              <option value="Educational">${t("s_styleEdu")}</option>
+              <option value="Story">${t("s_styleStory")}</option>
+              <option value="Professional">${t("s_stylePro")}</option>
             </select>
           </div>
         </div>
 
         <div class="grid2">
           <div>
-            <label>Language</label>
+            <label>${t("labelLanguage")}</label>
             <select id="language">
-              <option>English</option><option>Russian</option><option>Spanish</option><option>German</option><option>French</option>
+              <option value="English">${t("langEnglish")}</option>
+              <option value="Russian">${t("langRussian")}</option>
+              <option value="Spanish">${t("langSpanish")}</option>
+              <option value="German">${t("langGerman")}</option>
+              <option value="French">${t("langFrench")}</option>
             </select>
           </div>
           <div>
-            <label>Length</label>
+            <label>${t("s_len")}</label>
             <select id="length">
-              <option>Short</option><option selected>Medium</option><option>Long</option>
+              <option value="Short">${t("s_lenShort")}</option>
+              <option value="Medium" selected>${t("s_lenMed")}</option>
+              <option value="Long">${t("s_lenLong")}</option>
             </select>
           </div>
         </div>
 
         <div class="actions">
           <div class="leftActions">
-            <button class="btn primary" id="goBtn" data-label="📣 Generate post">📣 Generate post</button>
-            <span class="mini">Hook • structure • CTA</span>
+            <button class="btn primary" id="goBtn" data-label="${t("s_btn")}">${t("s_btn")}</button>
+            <span class="mini">${t("s_mini")}</span>
           </div>
           <div class="leftActions">
-            <button class="btn" id="copyBtn">Copy</button>
-            <button class="btn" id="saveBtn">Save .txt</button>
+            <button class="btn" id="copyBtn">${t("btnCopy")}</button>
+            <button class="btn" id="saveBtn">${t("btnSave")}</button>
           </div>
         </div>
 
@@ -531,11 +691,13 @@
       `;
     }
 
-    function renderTool(){
+    function renderTool(preserved){
       const area = document.getElementById("toolArea");
       if(state.tool === "humanize") area.innerHTML = toolHumanize();
       if(state.tool === "coverletter") area.innerHTML = toolCoverLetter();
       if(state.tool === "social") area.innerHTML = toolSocial();
+
+      if(preserved) restoreToolValues(preserved);
 
       document.getElementById("goBtn").addEventListener("click", onGenerate);
       document.getElementById("copyBtn").addEventListener("click", onCopy);
@@ -559,7 +721,7 @@
 
     async function onGenerate(){
       if(freeLeft() <= 0){
-        toast("Free limit reached.");
+        toast(t("t_freeLimit"));
         document.getElementById("paywall").scrollIntoView({behavior:"smooth", block:"center"});
         return;
       }
@@ -568,7 +730,7 @@
 
       if(state.tool === "humanize"){
         payload.inputText = (document.getElementById("inputText").value || "").trim();
-        if(!payload.inputText) return toast("Paste text first.");
+        if(!payload.inputText) return toast(t("t_pasteFirst"));
       }
 
       if(state.tool === "coverletter"){
@@ -576,14 +738,14 @@
         payload.company = (document.getElementById("company").value || "").trim();
         payload.background = (document.getElementById("background").value || "").trim();
         payload.jobDesc = (document.getElementById("jobDesc").value || "").trim();
-        if(!payload.jobTitle || !payload.background || !payload.jobDesc) return toast("Fill required fields.");
+        if(!payload.jobTitle || !payload.background || !payload.jobDesc) return toast(t("t_fillRequired"));
       }
 
       if(state.tool === "social"){
         payload.topic = (document.getElementById("topic").value || "").trim();
         payload.platform = (document.getElementById("platform").value || "Telegram");
         payload.length = (document.getElementById("length").value || "Medium");
-        if(!payload.topic) return toast("Describe your topic.");
+        if(!payload.topic) return toast(t("t_describeTopic"));
       }
 
       const resultBox = document.getElementById("resultBox");
@@ -601,16 +763,16 @@
 
         const data = await r.json();
         if(!r.ok){
-          toast(data?.error || "Request failed");
+          toast(data?.error || t("t_requestFailed"));
           return;
         }
 
         resultBox.style.display = "block";
         resultText.textContent = data.outputText || "";
         setUsed(getUsed() + 1);
-        toast("Done ✅");
+        toast(t("t_done"));
       } catch(e){
-        toast("Network error");
+        toast(t("t_network"));
       } finally {
         setLoading(false);
       }
@@ -618,27 +780,74 @@
 
     function onCopy(){
       const text = document.getElementById("resultText")?.textContent || "";
-      if(!text.trim()) return toast("Nothing to copy.");
+      if(!text.trim()) return toast(t("t_nothingCopy"));
       navigator.clipboard.writeText(text);
-      toast("Copied ✨");
+      toast(t("t_copied"));
     }
 
     function onSave(){
       const text = document.getElementById("resultText")?.textContent || "";
-      if(!text.trim()) return toast("Nothing to save.");
+      if(!text.trim()) return toast(t("t_nothingSave"));
       const blob = new Blob([text], {type:"text/plain;charset=utf-8"});
       const a = document.createElement("a");
       a.href = URL.createObjectURL(blob);
       a.download = `talentink-${state.tool}.txt`;
       a.click();
       URL.revokeObjectURL(a.href);
-      toast("Saved ✅");
+      toast(t("t_savedFile"));
     }
 
+    function applyLanguageToStaticUI(){
+      // top / hero
+      document.getElementById("resetBtn").textContent = t("resetBtn");
+      document.getElementById("pricingBtn").textContent = t("pricingBtn");
+      document.getElementById("ui_heroPill").textContent = t("heroPill");
+      document.getElementById("ui_title").textContent = t("title");
+      document.getElementById("ui_sub").textContent = t("sub");
+
+      // tabs
+      document.getElementById("tab_humanize").textContent = t("tabHumanize");
+      document.getElementById("tab_cover").textContent = t("tabCover");
+      document.getElementById("tab_social").textContent = t("tabSocial");
+
+      // side
+      document.getElementById("ui_freeTitle").textContent = t("freeTitle");
+      document.getElementById("ui_getTitle").textContent = t("getTitle");
+      document.getElementById("ui_get1").textContent = t("get1");
+      document.getElementById("ui_get2").textContent = t("get2");
+      document.getElementById("ui_get3").textContent = t("get3");
+
+      document.getElementById("ui_priceTitle").textContent = t("priceTitle");
+      document.getElementById("ui_priceNote").textContent = t("priceNote");
+      document.getElementById("ui_price1").textContent = t("price1");
+      document.getElementById("ui_price1b").textContent = t("price1b");
+      document.getElementById("ui_price2").textContent = t("price2");
+      document.getElementById("ui_price2b").textContent = t("price2b");
+
+      document.getElementById("ui_payTitle").textContent = t("payTitle");
+      document.getElementById("ui_payText").textContent = t("payText");
+      document.getElementById("buyBtn").textContent = t("buyBtn");
+      document.getElementById("learnBtn").textContent = t("learnBtn");
+
+      document.getElementById("ui_footerBrand").textContent = t("footerBrand");
+
+      // lang box
+      document.getElementById("ui_langTitle").textContent = t("langTitle");
+      document.getElementById("ui_langHint").textContent = t("langHint");
+
+      // pill
+      updatePill();
+
+      // free info re-render
+      renderFreeInfo();
+    }
+
+    // Buttons
     document.getElementById("resetBtn").addEventListener("click", ()=>{
       localStorage.removeItem(LS_KEY);
       renderFreeInfo();
-      toast("Counter reset");
+      updatePill();
+      toast(t("t_counterReset"));
     });
 
     document.getElementById("pricingBtn").addEventListener("click", ()=>{
@@ -646,63 +855,39 @@
       document.getElementById("paywall").scrollIntoView({behavior:"smooth", block:"center"});
     });
 
-    document.getElementById("buyBtn").addEventListener("click", ()=> toast("Payments next ✅"));
+    document.getElementById("buyBtn").addEventListener("click", ()=> toast(t("t_paymentsNext")));
+    document.getElementById("learnBtn").addEventListener("click", ()=> toast(t("t_howWorks")));
 
-    function showSupport(){
-      const lang = getLang();
-      toast(i18n[lang].supportMsg);
-    }
-    window.showSupport = showSupport;
-
-    // ✅ Language UI (footer only)
-    function getLang(){
-      const saved = localStorage.getItem(LANG_KEY);
-      return (saved && i18n[saved]) ? saved : "en";
-    }
-
-    function setLang(l){
-      if(!i18n[l]) l = "en";
-      localStorage.setItem(LANG_KEY, l);
-      applyLang();
-    }
-
-    function applyLang(){
-      const l = getLang();
-      const t = i18n[l];
-      document.getElementById("lang").value = l;
-
-      document.getElementById("ftLangLabel").textContent = t.langLabel;
-      document.getElementById("ftProduct").textContent = t.product;
-      document.getElementById("ftLegal").textContent = t.legal;
-      document.getElementById("ftSupport").textContent = t.support;
-      document.getElementById("ftBrandDesc").textContent = t.brandDesc;
-      document.getElementById("ftPrivacy").textContent = t.privacy;
-      document.getElementById("ftTerms").textContent = t.terms;
-
-      const y = new Date().getFullYear();
-      document.getElementById("ftCopyright").innerHTML = t.copyright(y);
-    }
-
-    document.getElementById("lang").addEventListener("change", (e)=>{
-      setLang(e.target.value);
-      toast("Saved ✅");
-    });
-
+    // Tabs
     document.querySelectorAll(".tab").forEach(btn=>{
       btn.addEventListener("click", ()=>{
         document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
         btn.classList.add("active");
         state.tool = btn.dataset.tool;
-        renderTool();
+        const preserved = captureToolValues();
+        renderTool(preserved);
       });
     });
 
-    document.getElementById("yr").textContent = new Date().getFullYear();
-    document.getElementById("yr2").textContent = new Date().getFullYear();
+    // Language selector
+    const langSelect = document.getElementById("lang");
+    langSelect.value = getLang();
+    langSelect.addEventListener("change", ()=>{
+      const chosen = langSelect.value;
+      localStorage.setItem(LANG_KEY, chosen);
+      // обновим все тексты + перерисуем активный инструмент без потери ввода
+      applyLanguageToStaticUI();
+      const preserved = captureToolValues();
+      renderTool(preserved);
+      toast(t("t_saved"));
+    });
 
+    // init
+    document.getElementById("yr").textContent = new Date().getFullYear();
+
+    applyLanguageToStaticUI();
     renderFreeInfo();
     renderTool();
-    applyLang();
   </script>
 </body>
 </html>
