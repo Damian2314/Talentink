@@ -1,2 +1,2 @@
-# Talentink
-TalentInk — AI-powered text humanizer and content generator SaaS.
+# Virex
+Virex — AI Writing Toolkit.
