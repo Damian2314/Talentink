@@ -7,6 +7,9 @@
   <meta name="description" content="VIREX — AI Writing Toolkit: Humanize, Cover Letter, Social Post." />
   <meta name="theme-color" content="#0b0f19"/>
 
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="shortcut icon" href="/favicon.svg" />
+
   <style>
     :root{
       --bg:#070a12;
@@ -58,15 +61,24 @@
       gap:12px;
       user-select:none;
     }
+
+    /* Logo mark */
     .logo{
       width:40px;height:40px;
       border-radius:14px;
-      background:
-        radial-gradient(18px 18px at 30% 30%, rgba(255,255,255,.28), transparent 55%),
-        linear-gradient(135deg, rgba(124,92,255,1), rgba(34,197,94,1));
-      box-shadow: 0 12px 32px rgba(124,92,255,.25);
+      background: rgba(255,255,255,.04);
       border:1px solid rgba(255,255,255,.18);
+      box-shadow: 0 12px 32px rgba(124,92,255,.18);
+      display:flex;
+      align-items:center;
+      justify-content:center;
     }
+    .logoImg{
+      width:22px;
+      height:22px;
+      display:block;
+    }
+
     .brand h1{
       margin:0;
       font-size:18px;
@@ -169,11 +181,8 @@
       margin-bottom:7px;
     }
 
-    /* --- Select styling (arrow, focus, dark options) --- */
-    .selectWrap{
-      position:relative;
-      width:100%;
-    }
+    /* Select styling (arrow, focus, dark options) */
+    .selectWrap{ position:relative; width:100%; }
     select{
       width:100%;
       appearance:none;
@@ -195,10 +204,7 @@
       box-shadow: 0 0 0 4px rgba(124,92,255,.18);
       background: rgba(255,255,255,.05);
     }
-    select option{
-      background:#0b1020;
-      color:var(--text);
-    }
+    select option{ background:#0b1020; color:var(--text); }
     .selectWrap:after{
       content:"";
       position:absolute;
@@ -318,9 +324,7 @@
     }
     .footerLinks a:hover{color:var(--text)}
 
-    /* -----------------------------
-       Cookie Consent (minimal)
-       ----------------------------- */
+    /* Cookie Consent (minimal) */
     .cookieBar{
       position:fixed;
       left:0; right:0; bottom:0;
@@ -368,7 +372,9 @@
   <div class="wrap">
     <header>
       <div class="brand">
-        <div class="logo" aria-hidden="true"></div>
+        <div class="logo" aria-hidden="true">
+          <img class="logoImg" src="/mark.svg" alt="" />
+        </div>
         <div>
           <h1>VIREX</h1>
           <small id="tagline">AI Writing Toolkit</small>
@@ -385,7 +391,6 @@
     </header>
 
     <div class="grid">
-
       <!-- Humanize -->
       <section class="card">
         <div class="cardHeader">
@@ -394,9 +399,7 @@
         </div>
         <div class="cardBody">
           <div class="field">
-            <div class="label">
-              <span id="hToneLabel">Tone</span>
-            </div>
+            <div class="label"><span id="hToneLabel">Tone</span></div>
             <div class="selectWrap">
               <select id="hTone">
                 <option value="neutral">Neutral</option>
@@ -408,9 +411,7 @@
           </div>
 
           <div class="field">
-            <div class="label">
-              <span id="hInputLabel">Input</span>
-            </div>
+            <div class="label"><span id="hInputLabel">Input</span></div>
             <textarea id="hInput" placeholder="Paste your text here..."></textarea>
           </div>
 
@@ -433,9 +434,7 @@
         </div>
         <div class="cardBody">
           <div class="field">
-            <div class="label">
-              <span id="cStyleLabel">Style</span>
-            </div>
+            <div class="label"><span id="cStyleLabel">Style</span></div>
             <div class="selectWrap">
               <select id="cStyle">
                 <option value="concise">Concise</option>
@@ -446,9 +445,7 @@
           </div>
 
           <div class="field">
-            <div class="label">
-              <span id="cInputLabel">Brief</span>
-            </div>
+            <div class="label"><span id="cInputLabel">Brief</span></div>
             <textarea id="cInput" placeholder="Role, company, experience, key achievements, skills, tone..."></textarea>
           </div>
 
@@ -471,9 +468,7 @@
         </div>
         <div class="cardBody">
           <div class="field">
-            <div class="label">
-              <span id="sPlatformLabel">Platform</span>
-            </div>
+            <div class="label"><span id="sPlatformLabel">Platform</span></div>
             <div class="selectWrap">
               <select id="sPlatform">
                 <option value="linkedin">LinkedIn</option>
@@ -484,9 +479,7 @@
           </div>
 
           <div class="field">
-            <div class="label">
-              <span id="sInputLabel">Topic</span>
-            </div>
+            <div class="label"><span id="sInputLabel">Topic</span></div>
             <textarea id="sInput" placeholder="What do you want to post about? Add key points, CTA, hashtags..."></textarea>
           </div>
 
@@ -500,7 +493,6 @@
           <div class="hint" id="sHint">Tip: one strong hook + 3 bullets + CTA works best on most platforms.</div>
         </div>
       </section>
-
     </div>
 
     <footer>
@@ -526,9 +518,7 @@
   <div class="paywall" id="paywall">
     <div class="paywallCard" role="dialog" aria-modal="true" aria-labelledby="pwTitle">
       <h3 id="pwTitle">Upgrade to continue</h3>
-      <p id="pwText">
-        You’ve used your <b>2 free generations</b>. Upgrade to unlock unlimited generations and future features.
-      </p>
+      <p id="pwText">You’ve used your <b>2 free generations</b>. Upgrade to unlock unlimited generations and future features.</p>
 
       <div class="paywallRow">
         <button class="btn primary" id="pwUpgrade" type="button">Upgrade</button>
@@ -556,9 +546,7 @@
   </div>
 
   <script>
-    // -----------------------------
-    // VIREX — UI i18n (UI only)
-    // -----------------------------
+    // UI i18n (UI only)
     const I18N = {
       en: {
         tagline: "AI Writing Toolkit",
@@ -655,19 +643,13 @@
       }
     };
 
-    // -----------------------------
-    // Keys
-    // -----------------------------
     const MAX_FREE = 2;
     const LS_FREE = "virex_free_left";
     const LS_LANG = "virex_lang";
-    const LS_COOKIE = "virex_cookie_consent"; // "accepted" | "declined"
+    const LS_COOKIE = "virex_cookie_consent"; // null | accepted | declined
 
     const $ = (id) => document.getElementById(id);
 
-    // -----------------------------
-    // Free counter + paywall
-    // -----------------------------
     function getFreeLeft(){
       const raw = localStorage.getItem(LS_FREE);
       const n = raw === null ? MAX_FREE : parseInt(raw, 10);
@@ -677,8 +659,10 @@
       localStorage.setItem(LS_FREE, String(Math.max(0, n)));
       $("freeLeft").textContent = String(getFreeLeft());
     }
+
     function showPaywall(){ $("paywall").style.display = "flex"; }
     function hidePaywall(){ $("paywall").style.display = "none"; }
+
     function consumeFreeOrPaywall(){
       const left = getFreeLeft();
       if(left <= 0){
@@ -689,9 +673,6 @@
       return true;
     }
 
-    // -----------------------------
-    // Copy / Save
-    // -----------------------------
     async function copyText(text){
       try{
         await navigator.clipboard.writeText(text);
@@ -704,6 +685,7 @@
         ta.remove();
       }
     }
+
     function saveTxt(filename, content){
       const blob = new Blob([content], {type:"text/plain;charset=utf-8"});
       const a = document.createElement("a");
@@ -715,9 +697,7 @@
       URL.revokeObjectURL(a.href);
     }
 
-    // -----------------------------
-    // Placeholder generators (front-only demo)
-    // -----------------------------
+    // Front-only demo generators (replace with real API later)
     function genHumanize(input, tone){
       if(!input.trim()) return "";
       const prefix = tone === "formal" ? "Refined version:\n"
@@ -741,29 +721,16 @@
       return head + "—\n" + topic.trim();
     }
 
-    // -----------------------------
-    // Cookie Consent
-    // -----------------------------
-    function getCookieConsent(){
-      return localStorage.getItem(LS_COOKIE); // null | "accepted" | "declined"
-    }
+    // Cookie consent
+    function getCookieConsent(){ return localStorage.getItem(LS_COOKIE); }
+    function showCookieBar(){ $("cookieBar").style.display = "block"; }
+    function hideCookieBar(){ $("cookieBar").style.display = "none"; }
     function setCookieConsent(value){
       localStorage.setItem(LS_COOKIE, value);
       hideCookieBar();
-
-      // If you later add analytics, enable ONLY when accepted:
-      // if (value === "accepted") initAnalytics();
-    }
-    function showCookieBar(){
-      $("cookieBar").style.display = "block";
-    }
-    function hideCookieBar(){
-      $("cookieBar").style.display = "none";
+      // later: enable analytics only if accepted
     }
 
-    // -----------------------------
-    // i18n apply
-    // -----------------------------
     function applyLang(lang){
       const t = I18N[lang] || I18N.en;
 
@@ -808,7 +775,6 @@
       $("pwClose").textContent = t.pwClose;
       $("pwSmall").textContent = t.pwSmall;
 
-      // cookie bar i18n (note: innerHTML used intentionally for link)
       $("cookieText").innerHTML = t.cookieText;
       $("cookieAccept").textContent = t.cookieAccept;
       $("cookieDecline").textContent = t.cookieDecline;
@@ -816,20 +782,14 @@
       localStorage.setItem(LS_LANG, lang);
     }
 
-    // -----------------------------
-    // Init
-    // -----------------------------
     (function init(){
       $("year").textContent = String(new Date().getFullYear());
 
-      // Free counter init
       $("freeLeft").textContent = String(getFreeLeft());
 
-      // Language init
       const savedLang = localStorage.getItem(LS_LANG) || "en";
       $("langSelect").value = savedLang;
       applyLang(savedLang);
-
       $("langSelect").addEventListener("change", (e)=> applyLang(e.target.value));
 
       $("resetFreeBtn").addEventListener("click", ()=>{
@@ -845,11 +805,8 @@
         alert("Upgrade flow will be added next.");
       });
 
-      // Cookie consent init
-      const consent = getCookieConsent();
-      if(!consent){
-        showCookieBar();
-      }
+      // cookie bar show once
+      if(!getCookieConsent()) showCookieBar();
       $("cookieAccept").addEventListener("click", ()=> setCookieConsent("accepted"));
       $("cookieDecline").addEventListener("click", ()=> setCookieConsent("declined"));
 
