@@ -13,10 +13,6 @@
   <style>
     :root{
       --bg:#070a12;
-      --panel:#0b1020;
-      --panel2:#0a0f1d;
-      --card:#0b132a;
-      --card2:#0a1226;
       --text:#e9ecf5;
       --muted:#a7b0c3;
       --line:rgba(255,255,255,.10);
@@ -26,7 +22,6 @@
       --danger:#ef4444;
       --shadow: 0 18px 60px rgba(0,0,0,.55);
       --radius: 18px;
-      --radius2: 14px;
       --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
       --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
     }
@@ -43,72 +38,26 @@
         var(--bg);
     }
     a{color:inherit}
-    .wrap{
-      max-width:1100px;
-      margin:0 auto;
-      padding:28px 18px 26px;
-    }
-    header{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:14px;
-      margin-bottom:18px;
-    }
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      user-select:none;
-    }
-
-    /* Logo mark */
+    .wrap{max-width:1100px;margin:0 auto;padding:28px 18px 26px;}
+    header{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:18px;}
+    .brand{display:flex;align-items:center;gap:12px;user-select:none;}
     .logo{
-      width:40px;height:40px;
-      border-radius:14px;
+      width:40px;height:40px;border-radius:14px;
       background: rgba(255,255,255,.04);
       border:1px solid rgba(255,255,255,.18);
       box-shadow: 0 12px 32px rgba(124,92,255,.18);
-      display:flex;
-      align-items:center;
-      justify-content:center;
+      display:flex;align-items:center;justify-content:center;
     }
-    .logoImg{
-      width:22px;
-      height:22px;
-      display:block;
-    }
+    .logoImg{width:22px;height:22px;display:block;}
+    .brand h1{margin:0;font-size:18px;letter-spacing:.18em;text-transform:uppercase;line-height:1.15;}
+    .brand small{display:block;margin-top:3px;font-size:12px;color:var(--muted);letter-spacing:.02em;}
 
-    .brand h1{
-      margin:0;
-      font-size:18px;
-      letter-spacing:.18em;
-      text-transform:uppercase;
-      line-height:1.15;
-    }
-    .brand small{
-      display:block;
-      margin-top:3px;
-      font-size:12px;
-      color:var(--muted);
-      letter-spacing:.02em;
-      text-transform:none;
-    }
-    .topRight{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      flex-wrap:wrap;
-      justify-content:flex-end;
-    }
+    .topRight{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end;}
     .pill{
-      display:flex;
-      align-items:center;
-      gap:10px;
+      display:flex;align-items:center;gap:10px;
       background:rgba(255,255,255,.04);
       border:1px solid var(--line);
-      padding:10px 12px;
-      border-radius:999px;
+      padding:10px 12px;border-radius:999px;
       box-shadow: 0 10px 30px rgba(0,0,0,.28);
       backdrop-filter: blur(10px);
     }
@@ -124,6 +73,9 @@
       transition: transform .05s ease, border-color .2s ease, background .2s ease;
       font-weight:600;
       font-size:12px;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
     }
     .btn:hover{border-color:rgba(255,255,255,.22); background:rgba(255,255,255,.06)}
     .btn:active{transform: translateY(1px)}
@@ -136,58 +88,29 @@
       border-color:rgba(239,68,68,.45);
       background:rgba(239,68,68,.10);
     }
-    .grid{
-      display:grid;
-      grid-template-columns: 1fr;
-      gap:14px;
-      margin-top:16px;
-    }
-    @media(min-width: 960px){
-      .grid{grid-template-columns: 1fr 1fr 1fr;}
-    }
+
+    .grid{display:grid;grid-template-columns: 1fr;gap:14px;margin-top:16px;}
+    @media(min-width: 960px){ .grid{grid-template-columns: 1fr 1fr 1fr;} }
+
     .card{
       background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
       border:1px solid var(--line);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
       overflow:hidden;
-      position:relative;
     }
-    .cardHeader{
-      padding:16px 16px 10px;
-      border-bottom:1px solid var(--line);
-      background: rgba(0,0,0,.10);
-    }
-    .cardHeader h2{
-      margin:0;
-      font-size:14px;
-      letter-spacing:.08em;
-      text-transform:uppercase;
-    }
-    .cardHeader p{
-      margin:7px 0 0;
-      font-size:12px;
-      color:var(--muted);
-      line-height:1.45;
-    }
+    .cardHeader{padding:16px 16px 10px;border-bottom:1px solid var(--line);background: rgba(0,0,0,.10);}
+    .cardHeader h2{margin:0;font-size:14px;letter-spacing:.08em;text-transform:uppercase;}
+    .cardHeader p{margin:7px 0 0;font-size:12px;color:var(--muted);line-height:1.45;}
     .cardBody{padding:14px 16px 16px;}
     .field{margin-top:10px;}
-    .label{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      font-size:12px;
-      color:var(--muted);
-      margin-bottom:7px;
-    }
+    .label{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--muted);margin-bottom:7px;}
 
-    /* Select styling (arrow, focus, dark options) */
-    .selectWrap{ position:relative; width:100%; }
+    /* Select styling */
+    .selectWrap{position:relative;width:100%;}
     select{
       width:100%;
-      appearance:none;
-      -webkit-appearance:none;
-      -moz-appearance:none;
+      appearance:none;-webkit-appearance:none;-moz-appearance:none;
       background: rgba(255,255,255,.04);
       border:1px solid var(--line2);
       color:var(--text);
@@ -204,12 +127,10 @@
       box-shadow: 0 0 0 4px rgba(124,92,255,.18);
       background: rgba(255,255,255,.05);
     }
-    select option{ background:#0b1020; color:var(--text); }
+    select option{background:#0b1020;color:var(--text);}
     .selectWrap:after{
       content:"";
-      position:absolute;
-      right:14px;
-      top:50%;
+      position:absolute;right:14px;top:50%;
       width:10px;height:10px;
       transform: translateY(-50%) rotate(45deg);
       border-right:2px solid rgba(255,255,255,.55);
@@ -218,17 +139,13 @@
     }
 
     textarea{
-      width:100%;
-      min-height:120px;
+      width:100%;min-height:120px;
       background: rgba(255,255,255,.03);
       border:1px solid var(--line2);
       color:var(--text);
-      padding:12px;
-      border-radius: 14px;
-      outline:none;
-      resize:vertical;
-      line-height:1.45;
-      font-size:13px;
+      padding:12px;border-radius: 14px;
+      outline:none;resize:vertical;
+      line-height:1.45;font-size:13px;
     }
     textarea:focus{
       border-color: rgba(124,92,255,.75);
@@ -246,29 +163,22 @@
       white-space:pre-wrap;
       min-height:88px;
     }
-    .hint{
-      margin-top:10px;
-      font-size:12px;
-      color:var(--muted);
-      line-height:1.5;
-    }
-    .actions{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-top:12px;
-    }
+    .hint{margin-top:10px;font-size:12px;color:var(--muted);line-height:1.5;}
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;}
 
+    footer{
+      margin-top:18px;padding:16px 0 6px;border-top:1px solid var(--line);
+      display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;
+    }
+    .footerLeft{color:var(--muted);font-size:12px;line-height:1.4;}
+    .footerLinks{display:flex;gap:12px;align-items:center;flex-wrap:wrap;justify-content:flex-end;font-size:12px;}
+    .footerLinks a{color:var(--muted);text-decoration:none;border-bottom:1px dashed rgba(255,255,255,.18);}
+    .footerLinks a:hover{color:var(--text)}
+
+    /* Paywall */
     .paywall{
-      position:fixed;
-      inset:0;
-      display:none;
-      align-items:center;
-      justify-content:center;
-      padding:18px;
-      background: rgba(0,0,0,.70);
-      backdrop-filter: blur(10px);
-      z-index:9999;
+      position:fixed;inset:0;display:none;align-items:center;justify-content:center;
+      padding:18px;background: rgba(0,0,0,.70);backdrop-filter: blur(10px);z-index:9999;
     }
     .paywallCard{
       width:min(560px, 100%);
@@ -276,94 +186,71 @@
       border:1px solid rgba(255,255,255,.14);
       border-radius: 22px;
       box-shadow: 0 30px 90px rgba(0,0,0,.7);
-      padding:18px;
-      position:relative;
-      overflow:hidden;
+      padding:18px;position:relative;overflow:hidden;
     }
     .paywallCard:before{
-      content:"";
-      position:absolute;
-      inset:-120px -120px auto auto;
+      content:"";position:absolute;inset:-120px -120px auto auto;
       width:240px;height:240px;
       background: radial-gradient(circle at 30% 30%, rgba(124,92,255,.35), transparent 60%);
       transform: rotate(20deg);
       pointer-events:none;
     }
-    .paywallCard h3{ margin:0 0 6px; font-size:16px; letter-spacing:.02em; }
-    .paywallCard p{ margin:0; color:var(--muted); font-size:13px; line-height:1.55; }
-    .paywallRow{ display:flex; gap:10px; flex-wrap:wrap; margin-top:14px; }
-    .small{ font-size:12px; color:var(--muted); margin-top:10px; line-height:1.5; }
+    .paywallCard h3{margin:0 0 6px;font-size:16px;letter-spacing:.02em;}
+    .paywallCard p{margin:0;color:var(--muted);font-size:13px;line-height:1.55;}
+    .paywallRow{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;}
+    .small{font-size:12px;color:var(--muted);margin-top:10px;line-height:1.5;}
 
-    footer{
-      margin-top:18px;
-      padding:16px 0 6px;
-      border-top:1px solid var(--line);
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:14px;
-      flex-wrap:wrap;
+    /* Auth modal */
+    .modal{
+      position:fixed;inset:0;display:none;align-items:center;justify-content:center;
+      padding:18px;background: rgba(0,0,0,.70);backdrop-filter: blur(10px);z-index:10000;
     }
-    .footerLeft{
-      color:var(--muted);
-      font-size:12px;
-      line-height:1.4;
+    .modalCard{
+      width:min(560px, 100%);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border:1px solid rgba(255,255,255,.14);
+      border-radius: 22px;
+      box-shadow: 0 30px 90px rgba(0,0,0,.7);
+      padding:18px;
     }
-    .footerLinks{
-      display:flex;
-      gap:12px;
-      align-items:center;
-      flex-wrap:wrap;
-      justify-content:flex-end;
-      font-size:12px;
+    .modalCard h3{margin:0 0 6px;font-size:16px;}
+    .modalCard p{margin:0;color:var(--muted);font-size:13px;line-height:1.55;}
+    .hr{height:1px;background:rgba(255,255,255,.10);margin:14px 0;}
+    .input{
+      width:100%;
+      background: rgba(255,255,255,.03);
+      border:1px solid var(--line2);
+      color:var(--text);
+      padding:11px 12px;
+      border-radius: 14px;
+      outline:none;
+      font-size:13px;
     }
-    .footerLinks a{
-      color:var(--muted);
-      text-decoration:none;
-      border-bottom:1px dashed rgba(255,255,255,.18);
+    .input:focus{
+      border-color: rgba(124,92,255,.75);
+      box-shadow: 0 0 0 4px rgba(124,92,255,.18);
     }
-    .footerLinks a:hover{color:var(--text)}
+    .status{margin-top:10px;font-size:12px;color:var(--muted);line-height:1.5;}
+    .status.ok{color:#9fe3b1}
+    .status.err{color:#ffb4b4}
 
-    /* Cookie Consent (minimal) */
+    /* Cookie */
     .cookieBar{
-      position:fixed;
-      left:0; right:0; bottom:0;
-      display:none;
-      z-index:9998;
-      padding:14px 14px 16px;
-      background: rgba(0,0,0,.55);
-      backdrop-filter: blur(10px);
-      border-top:1px solid rgba(255,255,255,.10);
+      position:fixed;left:0; right:0; bottom:0;display:none;z-index:9998;
+      padding:14px 14px 16px;background: rgba(0,0,0,.55);
+      backdrop-filter: blur(10px);border-top:1px solid rgba(255,255,255,.10);
     }
     .cookieInner{
-      max-width:1100px;
-      margin:0 auto;
-      display:flex;
-      gap:12px;
-      align-items:flex-start;
-      justify-content:space-between;
-      flex-wrap:wrap;
+      max-width:1100px;margin:0 auto;display:flex;gap:12px;
+      align-items:flex-start;justify-content:space-between;flex-wrap:wrap;
     }
     .cookieText{
       min-width:min(620px, 100%);
-      color:var(--muted);
-      font-size:12px;
-      line-height:1.55;
+      color:var(--muted);font-size:12px;line-height:1.55;
     }
     .cookieText b{color:var(--text)}
-    .cookieActions{
-      display:flex;
-      gap:10px;
-      align-items:center;
-      flex-wrap:wrap;
-      justify-content:flex-end;
-    }
-    .cookieLink{
-      color:var(--muted);
-      text-decoration:none;
-      border-bottom:1px dashed rgba(255,255,255,.18);
-      font-size:12px;
-    }
+    .cookieActions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end;}
+    .cookieLink{color:var(--muted);text-decoration:none;border-bottom:1px dashed rgba(255,255,255,.18);font-size:12px;}
     .cookieLink:hover{color:var(--text)}
   </style>
 </head>
@@ -382,11 +269,13 @@
       </div>
 
       <div class="topRight">
-        <div class="pill">
+        <div class="pill" title="Free generations left (per account)">
           <b id="freeLabel">Free left</b>
-          <span><span id="freeLeft">2</span>/2</span>
+          <span><span id="freeLeft">—</span></span>
         </div>
-        <button class="btn danger" id="resetFreeBtn" type="button">Reset free counter</button>
+
+        <button class="btn" id="authBtn" type="button">Sign in</button>
+        <button class="btn danger" id="signOutBtn" type="button" style="display:none;">Sign out</button>
       </div>
     </header>
 
@@ -394,12 +283,12 @@
       <!-- Humanize -->
       <section class="card">
         <div class="cardHeader">
-          <h2 id="hTitle">Humanize</h2>
-          <p id="hDesc">Make AI-like text feel more natural and human.</p>
+          <h2>Humanize</h2>
+          <p>Make AI-like text feel more natural and human.</p>
         </div>
         <div class="cardBody">
           <div class="field">
-            <div class="label"><span id="hToneLabel">Tone</span></div>
+            <div class="label"><span>Tone</span></div>
             <div class="selectWrap">
               <select id="hTone">
                 <option value="neutral">Neutral</option>
@@ -411,7 +300,7 @@
           </div>
 
           <div class="field">
-            <div class="label"><span id="hInputLabel">Input</span></div>
+            <div class="label"><span>Input</span></div>
             <textarea id="hInput" placeholder="Paste your text here..."></textarea>
           </div>
 
@@ -422,19 +311,19 @@
           </div>
 
           <div class="out" id="hOut"></div>
-          <div class="hint" id="hHint">Tip: keep the main idea, but vary sentence structure and add natural transitions.</div>
+          <div class="hint">Tip: keep the main idea, but vary sentence structure and add natural transitions.</div>
         </div>
       </section>
 
       <!-- Cover Letter -->
       <section class="card">
         <div class="cardHeader">
-          <h2 id="cTitle">Cover Letter</h2>
-          <p id="cDesc">Generate a tailored cover letter from a short brief.</p>
+          <h2>Cover Letter</h2>
+          <p>Generate a tailored cover letter from a short brief.</p>
         </div>
         <div class="cardBody">
           <div class="field">
-            <div class="label"><span id="cStyleLabel">Style</span></div>
+            <div class="label"><span>Style</span></div>
             <div class="selectWrap">
               <select id="cStyle">
                 <option value="concise">Concise</option>
@@ -445,7 +334,7 @@
           </div>
 
           <div class="field">
-            <div class="label"><span id="cInputLabel">Brief</span></div>
+            <div class="label"><span>Brief</span></div>
             <textarea id="cInput" placeholder="Role, company, experience, key achievements, skills, tone..."></textarea>
           </div>
 
@@ -456,19 +345,19 @@
           </div>
 
           <div class="out" id="cOut"></div>
-          <div class="hint" id="cHint">Tip: include 2–3 achievements with numbers (%, $, time saved, users, etc.).</div>
+          <div class="hint">Tip: include 2–3 achievements with numbers (%, $, time saved, users, etc.).</div>
         </div>
       </section>
 
       <!-- Social Post -->
       <section class="card">
         <div class="cardHeader">
-          <h2 id="sTitle">Social Post</h2>
-          <p id="sDesc">Write a clean post for Twitter/X, LinkedIn, or Instagram.</p>
+          <h2>Social Post</h2>
+          <p>Write a clean post for Twitter/X, LinkedIn, or Instagram.</p>
         </div>
         <div class="cardBody">
           <div class="field">
-            <div class="label"><span id="sPlatformLabel">Platform</span></div>
+            <div class="label"><span>Platform</span></div>
             <div class="selectWrap">
               <select id="sPlatform">
                 <option value="linkedin">LinkedIn</option>
@@ -479,7 +368,7 @@
           </div>
 
           <div class="field">
-            <div class="label"><span id="sInputLabel">Topic</span></div>
+            <div class="label"><span>Topic</span></div>
             <textarea id="sInput" placeholder="What do you want to post about? Add key points, CTA, hashtags..."></textarea>
           </div>
 
@@ -490,7 +379,7 @@
           </div>
 
           <div class="out" id="sOut"></div>
-          <div class="hint" id="sHint">Tip: one strong hook + 3 bullets + CTA works best on most platforms.</div>
+          <div class="hint">Tip: one strong hook + 3 bullets + CTA works best on most platforms.</div>
         </div>
       </section>
     </div>
@@ -518,7 +407,7 @@
   <div class="paywall" id="paywall">
     <div class="paywallCard" role="dialog" aria-modal="true" aria-labelledby="pwTitle">
       <h3 id="pwTitle">Upgrade to continue</h3>
-      <p id="pwText">You’ve used your <b>2 free generations</b>. Upgrade to unlock unlimited generations and future features.</p>
+      <p id="pwText">You’ve used your free generations. Upgrade later (subscriptions will be added next).</p>
 
       <div class="paywallRow">
         <button class="btn primary" id="pwUpgrade" type="button">Upgrade</button>
@@ -526,7 +415,31 @@
       </div>
 
       <div class="small" id="pwSmall">
-        Note: Payments/subscriptions will be added next (email + Google login, promo codes, subscriptions).
+        Next: promo codes, subscriptions, profile (avatar/name), and support email.
+      </div>
+    </div>
+  </div>
+
+  <!-- Auth Modal (EMAIL ONLY) -->
+  <div class="modal" id="authModal" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+    <div class="modalCard">
+      <h3 id="authTitle">Sign in to VIREX</h3>
+      <p id="authSub">Email-only login (magic link). No passwords.</p>
+
+      <div class="hr"></div>
+
+      <div class="label" style="margin-bottom:8px;">
+        <span>Email</span>
+      </div>
+      <input class="input" id="emailInput" type="email" placeholder="you@example.com" autocomplete="email" />
+      <div class="actions" style="margin-top:10px;">
+        <button class="btn primary" id="emailBtn" type="button">Send magic link</button>
+        <button class="btn" id="authClose" type="button">Close</button>
+      </div>
+
+      <div class="status" id="authStatus"></div>
+      <div class="small" style="margin-top:10px;">
+        By continuing, you agree to our <a href="/terms.html">Terms</a> and <a href="/privacy.html">Privacy Policy</a>.
       </div>
     </div>
   </div>
@@ -545,147 +458,142 @@
     </div>
   </div>
 
+  <!-- Supabase via CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <script>
-    // UI i18n (UI only)
+    // Supabase (YOUR REAL KEYS)
+    const SUPABASE_URL = "https://yrcgqbgomzqtrssdyewd.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_Uw04cxElgXksa7K-bUr4SA_sa85Z44C";
+
     const I18N = {
       en: {
-        tagline: "AI Writing Toolkit",
-        freeLabel: "Free left",
-        resetFree: "Reset free counter",
-
-        hTitle: "Humanize",
-        hDesc: "Make AI-like text feel more natural and human.",
-        hToneLabel: "Tone",
-        hInputLabel: "Input",
-        hGen: "Generate",
-        hCopy: "Copy",
-        hSave: "Save .txt",
-        hHint: "Tip: keep the main idea, but vary sentence structure and add natural transitions.",
-
-        cTitle: "Cover Letter",
-        cDesc: "Generate a tailored cover letter from a short brief.",
-        cStyleLabel: "Style",
-        cInputLabel: "Brief",
-        cGen: "Generate",
-        cCopy: "Copy",
-        cSave: "Save .txt",
-        cHint: "Tip: include 2–3 achievements with numbers (%, $, time saved, users, etc.).",
-
-        sTitle: "Social Post",
-        sDesc: "Write a clean post for Twitter/X, LinkedIn, or Instagram.",
-        sPlatformLabel: "Platform",
-        sInputLabel: "Topic",
-        sGen: "Generate",
-        sCopy: "Copy",
-        sSave: "Save .txt",
-        sHint: "Tip: one strong hook + 3 bullets + CTA works best on most platforms.",
-
-        rights: "All rights reserved.",
-        privacy: "Privacy Policy",
-        terms: "Terms of Service",
-
-        pwTitle: "Upgrade to continue",
-        pwText: "You’ve used your 2 free generations. Upgrade to unlock unlimited generations and future features.",
-        pwUpgrade: "Upgrade",
-        pwClose: "Close",
-        pwSmall: "Note: Payments/subscriptions will be added next (email + Google login, promo codes, subscriptions).",
-
-        cookieText: "<b>VIREX</b> uses cookies/local storage to remember preferences and improve the experience. You can read more in our <a class='cookieLink' href='/privacy.html'>Privacy Policy</a>.",
-        cookieAccept: "Accept",
-        cookieDecline: "Decline"
+        tagline:"AI Writing Toolkit",
+        freeLabel:"Free left",
+        rights:"All rights reserved.",
+        privacy:"Privacy Policy",
+        terms:"Terms of Service",
+        authBtn:"Sign in",
+        signOut:"Sign out",
+        cookieText:"<b>VIREX</b> uses cookies/local storage to remember preferences and improve the experience. You can read more in our <a class='cookieLink' href='/privacy.html'>Privacy Policy</a>.",
+        cookieAccept:"Accept",
+        cookieDecline:"Decline",
       },
-
       ru: {
-        tagline: "AI инструменты для текста",
-        freeLabel: "Бесплатно осталось",
-        resetFree: "Сбросить счётчик",
-
-        hTitle: "Humanize",
-        hDesc: "Сделайте текст более естественным и «человечным».",
-        hToneLabel: "Тон",
-        hInputLabel: "Ввод",
-        hGen: "Сгенерировать",
-        hCopy: "Копировать",
-        hSave: "Скачать .txt",
-        hHint: "Совет: сохраните смысл, но меняйте структуру предложений и добавляйте естественные связки.",
-
-        cTitle: "Cover Letter",
-        cDesc: "Сгенерируйте сопроводительное письмо по короткому описанию.",
-        cStyleLabel: "Стиль",
-        cInputLabel: "Описание",
-        cGen: "Сгенерировать",
-        cCopy: "Копировать",
-        cSave: "Скачать .txt",
-        cHint: "Совет: добавьте 2–3 достижения с цифрами (%, $, время, пользователи и т.д.).",
-
-        sTitle: "Social Post",
-        sDesc: "Пост для LinkedIn, Twitter/X или Instagram.",
-        sPlatformLabel: "Платформа",
-        sInputLabel: "Тема",
-        sGen: "Сгенерировать",
-        sCopy: "Копировать",
-        sSave: "Скачать .txt",
-        sHint: "Совет: сильный хук + 3 пункта + CTA обычно работают лучше всего.",
-
-        rights: "Все права защищены.",
-        privacy: "Политика конфиденциальности",
-        terms: "Условия использования",
-
-        pwTitle: "Нужен апгрейд",
-        pwText: "Вы использовали 2 бесплатные генерации. Оформите доступ, чтобы снять лимиты и открыть будущие функции.",
-        pwUpgrade: "Апгрейд",
-        pwClose: "Закрыть",
-        pwSmall: "Примечание: оплата/подписки будут добавлены следующими (логин email + Google, промокоды, подписки).",
-
-        cookieText: "<b>VIREX</b> использует cookies/local storage, чтобы запоминать настройки и улучшать опыт. Подробнее в <a class='cookieLink' href='/privacy.html'>Политике конфиденциальности</a>.",
-        cookieAccept: "Принять",
-        cookieDecline: "Отклонить"
+        tagline:"AI инструменты для текста",
+        freeLabel:"Бесплатно осталось",
+        rights:"Все права защищены.",
+        privacy:"Политика конфиденциальности",
+        terms:"Условия использования",
+        authBtn:"Войти",
+        signOut:"Выйти",
+        cookieText:"<b>VIREX</b> использует cookies/local storage, чтобы запоминать настройки и улучшать опыт. Подробнее в <a class='cookieLink' href='/privacy.html'>Политике конфиденциальности</a>.",
+        cookieAccept:"Принять",
+        cookieDecline:"Отклонить",
       }
     };
 
-    const MAX_FREE = 2;
-    const LS_FREE = "virex_free_left";
     const LS_LANG = "virex_lang";
-    const LS_COOKIE = "virex_cookie_consent"; // null | accepted | declined
-
+    const LS_COOKIE = "virex_cookie_consent";
     const $ = (id) => document.getElementById(id);
+    function show(el){ el.style.display = "flex"; }
+    function hide(el){ el.style.display = "none"; }
 
-    function getFreeLeft(){
-      const raw = localStorage.getItem(LS_FREE);
-      const n = raw === null ? MAX_FREE : parseInt(raw, 10);
-      return Number.isFinite(n) ? Math.max(0, n) : MAX_FREE;
+    function setStatus(text, kind){
+      const el = $("authStatus");
+      el.textContent = text || "";
+      el.className = "status" + (kind ? " " + kind : "");
     }
-    function setFreeLeft(n){
-      localStorage.setItem(LS_FREE, String(Math.max(0, n)));
-      $("freeLeft").textContent = String(getFreeLeft());
+
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // Profiles helpers (free attempts per account)
+    async function ensureProfile(user){
+      if(!user) return null;
+      const email = user.email || null;
+
+      let { data, error } = await supabase
+        .from("profiles")
+        .select("id,email,free_left")
+        .eq("id", user.id)
+        .maybeSingle();
+
+      if(!data){
+        const ins = await supabase.from("profiles").insert({
+          id: user.id,
+          email: email,
+          free_left: 2
+        }).select("id,email,free_left").single();
+        data = ins.data;
+        error = ins.error;
+      }
+
+      if(data && !data.email && email){
+        await supabase.from("profiles").update({ email: email }).eq("id", user.id);
+        data.email = email;
+      }
+
+      if(error) console.error(error);
+      return data || null;
+    }
+
+    async function getFreeLeft(user){
+      if(!user) return null;
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("free_left")
+        .eq("id", user.id)
+        .single();
+      if(error){ console.error(error); return null; }
+      return data.free_left;
+    }
+
+    async function setFreeLeft(user, n){
+      if(!user) return false;
+      const { error } = await supabase
+        .from("profiles")
+        .update({ free_left: Math.max(0, n), updated_at: new Date().toISOString() })
+        .eq("id", user.id);
+      if(error){ console.error(error); return false; }
+      return true;
     }
 
     function showPaywall(){ $("paywall").style.display = "flex"; }
     function hidePaywall(){ $("paywall").style.display = "none"; }
 
-    function consumeFreeOrPaywall(){
-      const left = getFreeLeft();
-      if(left <= 0){
-        showPaywall();
-        return false;
-      }
-      setFreeLeft(left - 1);
+    function openAuth(){ setStatus("", ""); show($("authModal")); }
+    function closeAuth(){ hide($("authModal")); }
+
+    async function requireAuthOrOpen(){
+      const { data } = await supabase.auth.getSession();
+      if(data.session?.user) return data.session.user;
+      openAuth();
+      return null;
+    }
+
+    async function consumeAttemptOrPaywall(){
+      const user = await requireAuthOrOpen();
+      if(!user) return false;
+
+      await ensureProfile(user);
+      const left = await getFreeLeft(user);
+
+      if(left === null){ openAuth(); return false; }
+      if(left <= 0){ showPaywall(); return false; }
+
+      await setFreeLeft(user, left - 1);
+      await refreshTopBar();
       return true;
     }
 
     async function copyText(text){
-      try{
-        await navigator.clipboard.writeText(text);
-      }catch(e){
+      try{ await navigator.clipboard.writeText(text); }
+      catch(e){
         const ta = document.createElement("textarea");
-        ta.value = text;
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand("copy");
-        ta.remove();
+        ta.value = text; document.body.appendChild(ta);
+        ta.select(); document.execCommand("copy"); ta.remove();
       }
     }
-
     function saveTxt(filename, content){
       const blob = new Blob([content], {type:"text/plain;charset=utf-8"});
       const a = document.createElement("a");
@@ -697,7 +605,7 @@
       URL.revokeObjectURL(a.href);
     }
 
-    // Front-only demo generators (replace with real API later)
+    // Demo generators
     function genHumanize(input, tone){
       if(!input.trim()) return "";
       const prefix = tone === "formal" ? "Refined version:\n"
@@ -721,114 +629,117 @@
       return head + "—\n" + topic.trim();
     }
 
-    // Cookie consent
+    // Cookie
     function getCookieConsent(){ return localStorage.getItem(LS_COOKIE); }
     function showCookieBar(){ $("cookieBar").style.display = "block"; }
     function hideCookieBar(){ $("cookieBar").style.display = "none"; }
-    function setCookieConsent(value){
-      localStorage.setItem(LS_COOKIE, value);
-      hideCookieBar();
-      // later: enable analytics only if accepted
+    function setCookieConsent(value){ localStorage.setItem(LS_COOKIE, value); hideCookieBar(); }
+
+    async function sendMagicLink(email){
+      setStatus("Sending magic link…", "");
+      if(!email || !email.includes("@")){ setStatus("Enter a valid email.", "err"); return; }
+
+      const { error } = await supabase.auth.signInWithOtp({
+        email,
+        options: { emailRedirectTo: window.location.origin + "/index.html" }
+      });
+
+      if(error){ console.error(error); setStatus(error.message || "Failed to send email.", "err"); return; }
+      setStatus("Check your email. Click the link to sign in.", "ok");
     }
 
-    function applyLang(lang){
+    async function signOut(){
+      await supabase.auth.signOut();
+      await refreshTopBar();
+    }
+
+    async function refreshTopBar(){
+      const { data } = await supabase.auth.getSession();
+      const user = data.session?.user || null;
+
+      const lang = localStorage.getItem(LS_LANG) || "en";
       const t = I18N[lang] || I18N.en;
 
       $("tagline").textContent = t.tagline;
       $("freeLabel").textContent = t.freeLabel;
-      $("resetFreeBtn").textContent = t.resetFree;
-
-      $("hTitle").textContent = t.hTitle;
-      $("hDesc").textContent = t.hDesc;
-      $("hToneLabel").textContent = t.hToneLabel;
-      $("hInputLabel").textContent = t.hInputLabel;
-      $("hGen").textContent = t.hGen;
-      $("hCopy").textContent = t.hCopy;
-      $("hSave").textContent = t.hSave;
-      $("hHint").textContent = t.hHint;
-
-      $("cTitle").textContent = t.cTitle;
-      $("cDesc").textContent = t.cDesc;
-      $("cStyleLabel").textContent = t.cStyleLabel;
-      $("cInputLabel").textContent = t.cInputLabel;
-      $("cGen").textContent = t.cGen;
-      $("cCopy").textContent = t.cCopy;
-      $("cSave").textContent = t.cSave;
-      $("cHint").textContent = t.cHint;
-
-      $("sTitle").textContent = t.sTitle;
-      $("sDesc").textContent = t.sDesc;
-      $("sPlatformLabel").textContent = t.sPlatformLabel;
-      $("sInputLabel").textContent = t.sInputLabel;
-      $("sGen").textContent = t.sGen;
-      $("sCopy").textContent = t.sCopy;
-      $("sSave").textContent = t.sSave;
-      $("sHint").textContent = t.sHint;
-
       $("rights").textContent = t.rights;
       $("privacyLink").textContent = t.privacy;
       $("termsLink").textContent = t.terms;
-
-      $("pwTitle").textContent = t.pwTitle;
-      $("pwText").textContent = t.pwText;
-      $("pwUpgrade").textContent = t.pwUpgrade;
-      $("pwClose").textContent = t.pwClose;
-      $("pwSmall").textContent = t.pwSmall;
+      $("authBtn").textContent = t.authBtn;
+      $("signOutBtn").textContent = t.signOut;
 
       $("cookieText").innerHTML = t.cookieText;
       $("cookieAccept").textContent = t.cookieAccept;
       $("cookieDecline").textContent = t.cookieDecline;
 
-      localStorage.setItem(LS_LANG, lang);
+      if(!user){
+        $("freeLeft").textContent = "—";
+        $("authBtn").style.display = "inline-flex";
+        $("signOutBtn").style.display = "none";
+        return;
+      }
+
+      $("authBtn").style.display = "none";
+      $("signOutBtn").style.display = "inline-flex";
+
+      await ensureProfile(user);
+      const left = await getFreeLeft(user);
+      $("freeLeft").textContent = (left === null ? "—" : String(left));
     }
 
     (function init(){
       $("year").textContent = String(new Date().getFullYear());
 
-      $("freeLeft").textContent = String(getFreeLeft());
-
+      // language
       const savedLang = localStorage.getItem(LS_LANG) || "en";
       $("langSelect").value = savedLang;
-      applyLang(savedLang);
-      $("langSelect").addEventListener("change", (e)=> applyLang(e.target.value));
-
-      $("resetFreeBtn").addEventListener("click", ()=>{
-        setFreeLeft(MAX_FREE);
-        hidePaywall();
+      $("langSelect").addEventListener("change", (e)=> {
+        localStorage.setItem(LS_LANG, e.target.value);
+        refreshTopBar();
       });
 
-      $("pwClose").addEventListener("click", hidePaywall);
-      $("paywall").addEventListener("click", (e)=>{
-        if(e.target === $("paywall")) hidePaywall();
-      });
-      $("pwUpgrade").addEventListener("click", ()=>{
-        alert("Upgrade flow will be added next.");
-      });
-
-      // cookie bar show once
+      // cookie
       if(!getCookieConsent()) showCookieBar();
       $("cookieAccept").addEventListener("click", ()=> setCookieConsent("accepted"));
       $("cookieDecline").addEventListener("click", ()=> setCookieConsent("declined"));
 
-      // Humanize
-      $("hGen").addEventListener("click", ()=>{
-        if(!consumeFreeOrPaywall()) return;
+      // paywall
+      $("pwClose").addEventListener("click", hidePaywall);
+      $("paywall").addEventListener("click", (e)=> { if(e.target === $("paywall")) hidePaywall(); });
+      $("pwUpgrade").addEventListener("click", ()=> alert("Subscriptions will be added next."));
+
+      // auth
+      $("authBtn").addEventListener("click", openAuth);
+      $("authClose").addEventListener("click", closeAuth);
+      $("authModal").addEventListener("click", (e)=> { if(e.target === $("authModal")) closeAuth(); });
+      $("emailBtn").addEventListener("click", ()=> sendMagicLink($("emailInput").value.trim()));
+      $("signOutBtn").addEventListener("click", signOut);
+
+      // auth state changes
+      supabase.auth.onAuthStateChange(async (_event, session) => {
+        if(session?.user) closeAuth();
+        await refreshTopBar();
+      });
+
+      refreshTopBar();
+
+      // Tool buttons (require auth + consume attempts)
+      $("hGen").addEventListener("click", async ()=>{
+        if(!await consumeAttemptOrPaywall()) return;
         $("hOut").textContent = genHumanize($("hInput").value, $("hTone").value);
       });
       $("hCopy").addEventListener("click", ()=> copyText($("hOut").textContent || ""));
       $("hSave").addEventListener("click", ()=> saveTxt("virex-humanize.txt", $("hOut").textContent || ""));
 
-      // Cover letter
-      $("cGen").addEventListener("click", ()=>{
-        if(!consumeFreeOrPaywall()) return;
+      $("cGen").addEventListener("click", async ()=>{
+        if(!await consumeAttemptOrPaywall()) return;
         $("cOut").textContent = genCoverLetter($("cInput").value, $("cStyle").value);
       });
       $("cCopy").addEventListener("click", ()=> copyText($("cOut").textContent || ""));
       $("cSave").addEventListener("click", ()=> saveTxt("virex-cover-letter.txt", $("cOut").textContent || ""));
 
-      // Social post
-      $("sGen").addEventListener("click", ()=>{
-        if(!consumeFreeOrPaywall()) return;
+      $("sGen").addEventListener("click", async ()=>{
+        if(!await consumeAttemptOrPaywall()) return;
         $("sOut").textContent = genSocial($("sInput").value, $("sPlatform").value);
       });
       $("sCopy").addEventListener("click", ()=> copyText($("sOut").textContent || ""));
