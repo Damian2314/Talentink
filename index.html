@@ -37,7 +37,7 @@
         var(--bg);
     }
     a{color:inherit}
-    .wrap{max-width:1100px;margin:0 auto;padding:28px 18px 26px; position:relative; z-index:1;}
+    .wrap{max-width:1100px;margin:0 auto;padding:28px 18px 26px;}
     header{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:18px; position:relative; z-index:5;}
     .brand{display:flex;align-items:center;gap:12px;user-select:none;}
     .logo{
@@ -75,9 +75,9 @@
       display:inline-flex;
       align-items:center;
       gap:8px;
-      pointer-events:auto;
       position:relative;
       z-index:7;
+      pointer-events:auto;
     }
     .btn:hover{border-color:rgba(255,255,255,.22); background:rgba(255,255,255,.06)}
     .btn:active{transform: translateY(1px)}
@@ -454,20 +454,16 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script>
-    // -----------------------------
-    // Supabase (YOUR REAL KEYS)
-    // -----------------------------
     const SUPABASE_URL = "https://yrcgqbgomzqtrssdyewd.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_Uw04cxElgXksa7K-bUr4SA_sa85Z44C";
 
-    // Make auth persistence explicit (prevents "logout on refresh")
+    // ВАЖНО: НЕ форсим flowType, чтобы работали и ?code= и #access_token=
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
       auth: {
         persistSession: true,
         autoRefreshToken: true,
         detectSessionInUrl: true,
-        storage: window.localStorage,
-        flowType: "pkce"
+        storage: window.localStorage
       }
     });
 
@@ -525,7 +521,34 @@
     function openAuth(){ setStatus("", ""); const m = $("authModal"); if(m) m.style.display = "flex"; }
     function closeAuth(){ const m = $("authModal"); if(m) m.style.display = "none"; }
 
-    // Profiles (free attempts per account)
+    // Correctly finalize auth after redirect (если прилетает ?code=)
+    async function finalizeAuthFromUrl(){
+      try{
+        const url = new URL(window.location.href);
+        const code = url.searchParams.get("code");
+
+        if(code){
+          const { error } = await sb.auth.exchangeCodeForSession(code);
+          if(error) console.error("exchangeCodeForSession:", error);
+
+          // чистим URL
+          url.searchParams.delete("code");
+          window.history.replaceState({}, document.title, url.pathname + (url.search ? url.search : ""));
+        }
+
+        // Если пришёл hash (#access_token=...), supabase-js сам подхватит,
+        // но мы чуть позже почистим URL чтобы не мешало.
+        if(window.location.hash && window.location.hash.includes("access_token")){
+          setTimeout(()=>{
+            window.history.replaceState({}, document.title, window.location.pathname + window.location.search);
+          }, 50);
+        }
+      } catch(e){
+        console.error(e);
+      }
+    }
+
+    // Profiles
     async function ensureProfile(user){
       if(!user) return null;
       const email = user.email || null;
@@ -642,37 +665,14 @@
       return head + "—\n" + topic.trim();
     }
 
-    // IMPORTANT: robust callback handling (prevents "not registered" + fixes session on refresh)
-    async function handleAuthRedirectIfAny(){
-      try{
-        const url = window.location.href;
-        const hasCode = url.includes("?code=") || url.includes("&code=");
-        const hasHashToken = url.includes("#access_token=") || url.includes("type=magiclink");
-
-        if(hasCode){
-          const { error } = await sb.auth.exchangeCodeForSession(url);
-          if(error) console.error("exchangeCodeForSession:", error);
-          // clean URL
-          window.history.replaceState({}, document.title, window.location.origin + window.location.pathname);
-        } else if(hasHashToken){
-          // supabase-js usually handles hash automatically, but keep URL clean anyway
-          // after a short tick so it can parse the hash
-          setTimeout(()=>{
-            window.history.replaceState({}, document.title, window.location.origin + window.location.pathname);
-          }, 50);
-        }
-      } catch(e){
-        console.error(e);
-      }
-    }
-
     async function sendMagicLink(email){
       setStatus("Sending magic link…", "");
       if(!email || !email.includes("@")){ setStatus("Enter a valid email.", "err"); return; }
 
+      // IMPORTANT: редирект только на origin (не /index.html)
       const { error } = await sb.auth.signInWithOtp({
         email,
-        options: { emailRedirectTo: window.location.origin } // safest for Vercel
+        options: { emailRedirectTo: window.location.origin }
       });
 
       if(error){ console.error(error); setStatus(error.message || "Failed to send email.", "err"); return; }
@@ -680,19 +680,14 @@
     }
 
     async function signOut(){
-      try{
-        const { error } = await sb.auth.signOut();
-        if(error) console.error("signOut error:", error);
+      // Реальный выход
+      const { error } = await sb.auth.signOut();
+      if(error) console.error("signOut:", error);
 
-        // Force UI refresh + guarantee session cleared
-        await refreshTopBar();
-
-        // If browser still shows old UI due to any caching/timing, reload once:
-        setTimeout(()=> window.location.reload(), 50);
-      } catch(e){
-        console.error(e);
-        window.location.reload();
-      }
+      // Обновляем UI (без перезагрузки)
+      await refreshTopBar();
+      closeAuth();
+      hidePaywall();
     }
 
     async function refreshTopBar(){
@@ -714,7 +709,7 @@
       if($("cookieAccept")) $("cookieAccept").textContent = t.cookieAccept;
       if($("cookieDecline")) $("cookieDecline").textContent = t.cookieDecline;
 
-      // Not logged in => hide pill + show Sign in
+      // NOT logged in
       if(!user){
         if($("freeLeft")) $("freeLeft").textContent = "—";
         if($("freePill")) $("freePill").style.display = "none";
@@ -723,19 +718,18 @@
         return;
       }
 
-      // Logged in => show Sign out
+      // logged in
       if($("authBtn")) $("authBtn").style.display = "none";
       if($("signOutBtn")) $("signOutBtn").style.display = "inline-flex";
 
       await ensureProfile(user);
       const left = await getFreeLeft(user);
 
-      // show pill only if left > 0 (and logged in)
+      // pill visible ONLY when logged in AND left > 0
       if(left !== null && left > 0){
         if($("freeLeft")) $("freeLeft").textContent = String(left);
         if($("freePill")) $("freePill").style.display = "inline-flex";
       } else {
-        if($("freeLeft")) $("freeLeft").textContent = String(left ?? "—");
         if($("freePill")) $("freePill").style.display = "none";
       }
     }
@@ -771,18 +765,21 @@
       if(modal) modal.addEventListener("click", (e)=> { if(e.target === modal) closeAuth(); });
       on("emailBtn","click", ()=> sendMagicLink(($("emailInput")?.value || "").trim()));
 
-      // Sign out: make click максимально надежным
-      on("signOutBtn","click", (e)=>{ e.preventDefault(); e.stopPropagation(); signOut(); });
+      // SIGN OUT — 100% привязка клика
+      const so = $("signOutBtn");
+      if(so){
+        so.addEventListener("click", (e)=>{ e.preventDefault(); e.stopPropagation(); signOut(); }, { capture:true });
+      }
 
-      // auth state changes
+      // Auth events
       sb.auth.onAuthStateChange(async (_event, session) => {
         if(session?.user) closeAuth();
         await refreshTopBar();
       });
 
-      // handle redirect + then render
+      // MAIN: finalize redirect (code/hash) then render
       (async ()=>{
-        await handleAuthRedirectIfAny();
+        await finalizeAuthFromUrl();
         await refreshTopBar();
       })();
 
