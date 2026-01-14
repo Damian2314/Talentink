@@ -110,7 +110,6 @@
     .field{margin-top:10px;}
     .label{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--muted);margin-bottom:7px;}
 
-    /* Select styling */
     .selectWrap{position:relative;width:100%;}
     select{
       width:100%;
@@ -179,7 +178,6 @@
     .footerLinks a{color:var(--muted);text-decoration:none;border-bottom:1px dashed rgba(255,255,255,.18);}
     .footerLinks a:hover{color:var(--text)}
 
-    /* Paywall */
     .paywall{
       position:fixed;inset:0;display:none;align-items:center;justify-content:center;
       padding:18px;background: rgba(0,0,0,.70);backdrop-filter: blur(10px);z-index:9999;
@@ -197,7 +195,6 @@
     .paywallRow{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;}
     .small{font-size:12px;color:var(--muted);margin-top:10px;line-height:1.5;}
 
-    /* Auth modal */
     .modal{
       position:fixed;inset:0;display:none;align-items:center;justify-content:center;
       padding:18px;background: rgba(0,0,0,.70);backdrop-filter: blur(10px);z-index:10000;
@@ -231,7 +228,6 @@
     .status.ok{color:#9fe3b1}
     .status.err{color:#ffb4b4}
 
-    /* Cookie */
     .cookieBar{
       position:fixed;left:0; right:0; bottom:0;display:none;z-index:9998;
       padding:14px 14px 16px;background: rgba(0,0,0,.55);
@@ -397,7 +393,6 @@
     </footer>
   </div>
 
-  <!-- Paywall -->
   <div class="paywall" id="paywall">
     <div class="paywallCard" role="dialog" aria-modal="true" aria-labelledby="pwTitle">
       <h3 id="pwTitle">Upgrade to continue</h3>
@@ -414,7 +409,6 @@
     </div>
   </div>
 
-  <!-- Auth Modal (EMAIL ONLY) -->
   <div class="modal" id="authModal" role="dialog" aria-modal="true" aria-labelledby="authTitle">
     <div class="modalCard">
       <h3 id="authTitle">Sign in to VIREX</h3>
@@ -438,7 +432,6 @@
     </div>
   </div>
 
-  <!-- Cookie Consent -->
   <div class="cookieBar" id="cookieBar" role="dialog" aria-modal="false" aria-label="Cookie consent">
     <div class="cookieInner">
       <div class="cookieText" id="cookieText">
@@ -452,7 +445,6 @@
     </div>
   </div>
 
-  <!-- Supabase via CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script>
@@ -508,46 +500,47 @@
       el.className = "status" + (kind ? " " + kind : "");
     }
 
-    // Cookie
     function getCookieConsent(){ return localStorage.getItem(LS_COOKIE); }
     function showCookieBar(){ const b = $("cookieBar"); if(b) b.style.display = "block"; }
     function hideCookieBar(){ const b = $("cookieBar"); if(b) b.style.display = "none"; }
     function setCookieConsent(value){ localStorage.setItem(LS_COOKIE, value); hideCookieBar(); }
 
-    // Paywall
     function showPaywall(){ const p = $("paywall"); if(p) p.style.display = "flex"; }
     function hidePaywall(){ const p = $("paywall"); if(p) p.style.display = "none"; }
 
-    // Auth modal
     function openAuth(){ setStatus("", ""); const m = $("authModal"); if(m) m.style.display = "flex"; }
     function closeAuth(){ const m = $("authModal"); if(m) m.style.display = "none"; }
 
-    // IMPORTANT: one-time parse/store session from URL (prevents AbortError + keeps session after refresh)
+    // ---------- FIX: handle BOTH ?code= and #access_token= ----------
     async function hydrateSessionFromUrlOnce(){
       try{
-        if(typeof sb.auth.getSessionFromUrl === "function"){
-          // storeSession:true ensures session persists
-          const { error } = await sb.auth.getSessionFromUrl({ storeSession: true });
-          if(error) console.error("getSessionFromUrl:", error);
-        }
-      } catch (e){
-        // ignore abort, it may happen if URL changes during load
-        console.warn("hydrateSessionFromUrlOnce:", e);
-      }
+        const url = new URL(window.location.href);
 
-      // clean URL (remove ?code and #access_token etc.)
-      try{
-        const u = new URL(window.location.href);
-        if(u.searchParams.has("code") || window.location.hash){
-          u.searchParams.delete("code");
-          window.history.replaceState({}, document.title, u.pathname + (u.search ? u.search : ""));
+        // 1) PKCE flow: ?code=...
+        const code = url.searchParams.get("code");
+        if(code){
+          const { error } = await sb.auth.exchangeCodeForSession(code);
+          if(error) console.error("exchangeCodeForSession:", error);
+        } else {
+          // 2) implicit flow: #access_token=...
+          if(window.location.hash && window.location.hash.includes("access_token=")){
+            if(typeof sb.auth.getSessionFromUrl === "function"){
+              const { error } = await sb.auth.getSessionFromUrl({ storeSession: true });
+              if(error) console.error("getSessionFromUrl:", error);
+            }
+          }
+        }
+
+        // clean URL (remove code/hash so it doesn't run twice)
+        if(code || window.location.hash){
+          url.searchParams.delete("code");
+          window.history.replaceState({}, document.title, url.pathname + (url.search ? url.search : ""));
         }
       } catch(e){
-        console.warn("clean url:", e);
+        console.warn("hydrateSessionFromUrlOnce:", e);
       }
     }
 
-    // Profiles
     async function ensureProfile(user){
       if(!user) return null;
       const email = user.email || null;
@@ -620,7 +613,6 @@
       return true;
     }
 
-    // Copy / Save
     async function copyText(text){
       try{ await navigator.clipboard.writeText(text); }
       catch(e){
@@ -629,6 +621,7 @@
         ta.select(); document.execCommand("copy"); ta.remove();
       }
     }
+
     function saveTxt(filename, content){
       const blob = new Blob([content], {type:"text/plain;charset=utf-8"});
       const a = document.createElement("a");
@@ -640,7 +633,6 @@
       URL.revokeObjectURL(a.href);
     }
 
-    // Demo generators
     function genHumanize(input, tone){
       if(!input.trim()) return "";
       const prefix = tone === "formal" ? "Refined version:\n"
@@ -649,6 +641,7 @@
                   : "Humanized version:\n";
       return prefix + input.trim();
     }
+
     function genCoverLetter(brief, style){
       if(!brief.trim()) return "";
       const head = style === "concise" ? "Cover Letter (Concise)\n"
@@ -656,6 +649,7 @@
                  : "Cover Letter\n";
       return head + "—\n" + brief.trim();
     }
+
     function genSocial(topic, platform){
       if(!topic.trim()) return "";
       const head = platform === "linkedin" ? "LinkedIn Post\n"
@@ -668,10 +662,12 @@
       setStatus("Sending magic link…", "");
       if(!email || !email.includes("@")){ setStatus("Enter a valid email.", "err"); return; }
 
-      // redirect to origin ONLY (works with your allowlist)
+      // redirect to CURRENT PAGE (safe for allowlist)
+      const redirectTo = window.location.origin + window.location.pathname;
+
       const { error } = await sb.auth.signInWithOtp({
         email,
-        options: { emailRedirectTo: window.location.origin }
+        options: { emailRedirectTo: redirectTo }
       });
 
       if(error){ console.error(error); setStatus(error.message || "Failed to send email.", "err"); return; }
@@ -722,7 +718,6 @@
       await ensureProfile(user);
       const left = await getFreeLeft(user);
 
-      // show pill only when logged in AND left > 0
       if(left !== null && left > 0){
         if($("freeLeft")) $("freeLeft").textContent = String(left);
         if($("freePill")) $("freePill").style.display = "inline-flex";
@@ -734,7 +729,6 @@
     (function init(){
       if($("year")) $("year").textContent = String(new Date().getFullYear());
 
-      // language
       const savedLang = localStorage.getItem(LS_LANG) || "en";
       if($("langSelect")){
         $("langSelect").value = savedLang;
@@ -744,25 +738,22 @@
         });
       }
 
-      // cookie
       if(!getCookieConsent()) showCookieBar();
       on("cookieAccept","click", ()=> setCookieConsent("accepted"));
       on("cookieDecline","click", ()=> setCookieConsent("declined"));
 
-      // paywall
       on("pwClose","click", hidePaywall);
       on("pwUpgrade","click", ()=> alert("Subscriptions will be added next."));
       const pw = $("paywall");
       if(pw) pw.addEventListener("click", (e)=> { if(e.target === pw) hidePaywall(); });
 
-      // auth ui
       on("authBtn","click", openAuth);
       on("authClose","click", closeAuth);
       const modal = $("authModal");
       if(modal) modal.addEventListener("click", (e)=> { if(e.target === modal) closeAuth(); });
       on("emailBtn","click", ()=> sendMagicLink(($("emailInput")?.value || "").trim()));
 
-      // IMPORTANT: signOut click must always work
+      // make sign out always clickable
       const so = $("signOutBtn");
       if(so){
         so.addEventListener("click", (e)=> {
@@ -772,19 +763,16 @@
         }, true);
       }
 
-      // auth state changes
       sb.auth.onAuthStateChange(async (_event, session) => {
         if(session?.user) closeAuth();
         await refreshTopBar();
       });
 
-      // hydrate session (this is what fixes "logout on refresh" + avoids AbortError)
       (async ()=>{
         await hydrateSessionFromUrlOnce();
         await refreshTopBar();
       })();
 
-      // Tool buttons
       on("hGen","click", async ()=>{ if(!await consumeAttemptOrPaywall()) return; $("hOut").textContent = genHumanize($("hInput").value, $("hTone").value); });
       on("hCopy","click", ()=> copyText($("hOut").textContent || ""));
       on("hSave","click", ()=> saveTxt("virex-humanize.txt", $("hOut").textContent || ""));
