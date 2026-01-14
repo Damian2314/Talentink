@@ -75,7 +75,6 @@
       display:inline-flex;
       align-items:center;
       gap:8px;
-      pointer-events:auto;
     }
     .btn:hover{border-color:rgba(255,255,255,.22); background:rgba(255,255,255,.06)}
     .btn:active{transform: translateY(1px)}
@@ -88,10 +87,10 @@
       border-color:rgba(239,68,68,.45);
       background:rgba(239,68,68,.10);
     }
-    .btn[disabled]{opacity:.6; cursor:not-allowed}
 
     .grid{display:grid;grid-template-columns: 1fr;gap:14px;margin-top:16px;}
     @media(min-width: 960px){ .grid{grid-template-columns: 1fr 1fr 1fr;} }
+    /* 4 карточки: на больших экранах будет 3 + 1 ниже (нормально) */
 
     .card{
       background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
@@ -107,6 +106,7 @@
     .field{margin-top:10px;}
     .label{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--muted);margin-bottom:7px;}
 
+    /* Select styling */
     .selectWrap{position:relative;width:100%;}
     select{
       width:100%;
@@ -175,6 +175,7 @@
     .footerLinks a{color:var(--muted);text-decoration:none;border-bottom:1px dashed rgba(255,255,255,.18);}
     .footerLinks a:hover{color:var(--text)}
 
+    /* Paywall */
     .paywall{
       position:fixed;inset:0;display:none;align-items:center;justify-content:center;
       padding:18px;background: rgba(0,0,0,.70);backdrop-filter: blur(10px);z-index:9999;
@@ -192,6 +193,7 @@
     .paywallRow{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;}
     .small{font-size:12px;color:var(--muted);margin-top:10px;line-height:1.5;}
 
+    /* Auth modal */
     .modal{
       position:fixed;inset:0;display:none;align-items:center;justify-content:center;
       padding:18px;background: rgba(0,0,0,.70);backdrop-filter: blur(10px);z-index:10000;
@@ -225,6 +227,7 @@
     .status.ok{color:#9fe3b1}
     .status.err{color:#ffb4b4}
 
+    /* Cookie */
     .cookieBar{
       position:fixed;left:0; right:0; bottom:0;display:none;z-index:9998;
       padding:14px 14px 16px;background: rgba(0,0,0,.55);
@@ -259,7 +262,7 @@
       </div>
 
       <div class="topRight">
-        <div class="pill" id="freePill" title="Free generations left (per account)">
+        <div class="pill" title="Free generations left (per account)">
           <b id="freeLabel">Free left</b>
           <span><span id="freeLeft">—</span></span>
         </div>
@@ -369,6 +372,42 @@
           <div class="hint">Tip: one strong hook + 3 bullets + CTA works best on most platforms.</div>
         </div>
       </section>
+
+      <!-- NEW: Code Check -->
+      <section class="card">
+        <div class="cardHeader">
+          <h2>Code Check</h2>
+          <p>Check code for errors and get a minimal fixed version.</p>
+        </div>
+        <div class="cardBody">
+          <div class="field">
+            <div class="label"><span>Language</span></div>
+            <div class="selectWrap">
+              <select id="codeLang">
+                <option value="JavaScript">JavaScript</option>
+                <option value="HTML">HTML</option>
+                <option value="CSS">CSS</option>
+                <option value="Python">Python</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="label"><span>Code</span></div>
+            <textarea id="codeInput" placeholder="Paste your code here..."></textarea>
+          </div>
+
+          <div class="actions">
+            <button class="btn primary" id="codeCheck" type="button">Check</button>
+            <button class="btn" id="codeCopy" type="button">Copy</button>
+            <button class="btn" id="codeSave" type="button">Save .txt</button>
+          </div>
+
+          <div class="out" id="codeOut"></div>
+          <div class="hint">Tip: keep it short for cheaper checks. Large files still work, but cost more.</div>
+        </div>
+      </section>
+
     </div>
 
     <footer>
@@ -386,6 +425,7 @@
             <option value="ru">Русский</option>
           </select>
         </div>
+
       </div>
     </footer>
   </div>
@@ -455,14 +495,8 @@
     const SUPABASE_URL = "https://yrcgqbgomzqtrssdyewd.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_Uw04cxElgXksa7K-bUr4SA_sa85Z44C";
 
-    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-      auth: {
-        persistSession: true,
-        autoRefreshToken: true,
-        detectSessionInUrl: true,
-        storage: window.localStorage,
-      },
-    });
+    // NEVER redeclare "supabase" elsewhere in this file.
+    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     const I18N = {
       en: {
@@ -641,7 +675,6 @@
 
       const { error } = await sb.auth.signInWithOtp({
         email,
-        // важно: редирект на корень сайта
         options: { emailRedirectTo: window.location.origin }
       });
 
@@ -650,22 +683,8 @@
     }
 
     async function signOut(){
-      const btn = $("signOutBtn");
-      if(btn){ btn.disabled = true; btn.textContent = "Signing out…"; }
-
-      try{
-        await sb.auth.signOut({ scope: "global" });
-      }catch(e){
-        console.error(e);
-      }
-
-      if(btn){ btn.disabled = false; }
+      try{ await sb.auth.signOut(); }catch(e){ console.error(e); }
       await refreshTopBar();
-    }
-
-    function setPillVisible(visible){
-      const pill = $("freePill");
-      if(pill) pill.style.display = visible ? "flex" : "none";
     }
 
     async function refreshTopBar(){
@@ -688,7 +707,6 @@
       if($("cookieDecline")) $("cookieDecline").textContent = t.cookieDecline;
 
       if(!user){
-        setPillVisible(false);
         if($("freeLeft")) $("freeLeft").textContent = "—";
         if($("authBtn")) $("authBtn").style.display = "inline-flex";
         if($("signOutBtn")) $("signOutBtn").style.display = "none";
@@ -700,34 +718,19 @@
 
       await ensureProfile(user);
       const left = await getFreeLeft(user);
-
-      // показываем pill только если осталось > 0
-      if(typeof left === "number" && left > 0){
-        setPillVisible(true);
-        if($("freeLeft")) $("freeLeft").textContent = String(left);
-      }else{
-        setPillVisible(false);
-        if($("freeLeft")) $("freeLeft").textContent = left === null ? "—" : String(left);
-      }
+      if($("freeLeft")) $("freeLeft").textContent = (left === null ? "—" : String(left));
     }
 
-    async function handleMagicLinkCode(){
-      // если Supabase прислал ?code=... (PKCE), нужно обменять на session
-      const url = new URL(window.location.href);
-      const code = url.searchParams.get("code");
-
-      if(!code) return;
-
-      try{
-        const { error } = await sb.auth.exchangeCodeForSession(window.location.href);
-        if(error) console.error("exchangeCodeForSession error:", error);
-      }catch(e){
-        console.error("exchangeCodeForSession exception:", e);
-      }
-
-      // убрать code из адреса, чтобы не мешал и не повторялся
-      url.searchParams.delete("code");
-      window.history.replaceState({}, document.title, url.toString());
+    // NEW: Code check (calls Vercel serverless /api/check-code)
+    async function checkCodeWithAI(language, code){
+      const r = await fetch("/api/check-code", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ language, code })
+      });
+      const data = await r.json().catch(()=> ({}));
+      if(!r.ok) throw new Error(data?.error || "Request failed");
+      return data.result || "";
     }
 
     (function init(){
@@ -765,10 +768,8 @@
         sendMagicLink(($("emailInput")?.value || "").trim());
       });
 
-      // sign out
       on("signOutBtn","click", (e)=> {
-        e.preventDefault();
-        e.stopPropagation();
+        e.preventDefault(); e.stopPropagation();
         signOut();
       });
 
@@ -778,8 +779,7 @@
         await refreshTopBar();
       });
 
-      // IMPORTANT: обработка PKCE code из magic link
-      handleMagicLinkCode().then(refreshTopBar);
+      refreshTopBar();
 
       // Tool buttons
       on("hGen","click", async ()=>{ if(!await consumeAttemptOrPaywall()) return; $("hOut").textContent = genHumanize($("hInput").value, $("hTone").value); });
@@ -793,6 +793,23 @@
       on("sGen","click", async ()=>{ if(!await consumeAttemptOrPaywall()) return; $("sOut").textContent = genSocial($("sInput").value, $("sPlatform").value); });
       on("sCopy","click", ()=> copyText($("sOut").textContent || ""));
       on("sSave","click", ()=> saveTxt("virex-social-post.txt", $("sOut").textContent || ""));
+
+      // NEW: Code Check buttons
+      on("codeCheck","click", async ()=> {
+        if(!await consumeAttemptOrPaywall()) return;
+        const lang = $("codeLang").value;
+        const code = $("codeInput").value || "";
+        $("codeOut").textContent = "Checking…";
+        try{
+          const result = await checkCodeWithAI(lang, code);
+          $("codeOut").textContent = result || "No output.";
+        }catch(e){
+          console.error(e);
+          $("codeOut").textContent = "Error: " + (e?.message || "Failed");
+        }
+      });
+      on("codeCopy","click", ()=> copyText($("codeOut").textContent || ""));
+      on("codeSave","click", ()=> saveTxt("virex-code-check.txt", $("codeOut").textContent || ""));
     })();
   </script>
 </body>
